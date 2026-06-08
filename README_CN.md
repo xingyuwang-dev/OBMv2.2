@@ -6,8 +6,6 @@
 - `online_app/`：Linux 服务器线上 gRPC 服务入口，后端通过 JSON 字符串请求模型计算。
 - `desktop_app/`：Windows/桌面版 PyQt6 图形界面入口。
 
-本次梳理未读取 `CB05/` 与 `MCMv331/` 下体量较大的 `txt` 和 `m` 文件；仅对 Python 调用关系、必要路径/导入错误与文档进行了整理。未安装任何 Python 包或系统库。
-
 ## 目录说明
 
 | 路径 | 作用 |
@@ -61,7 +59,7 @@ gRPC 服务默认监听 `8769` 端口。请求与响应都以字符串形式传�
 - 桌面界面：`PyQt6`
 - 可选/辅助：`pyaudio`、`pygame`、`diffeqpy`、`numba`
 
-本次整理没有安装这些依赖。若要运行模型，请在目标环境中按实际入口补齐依赖，并注意 `core/solver.so`、`core/solver2.so`、`core/solver.pyd` 与 `core/solver2.pyd` 与运行平台、Python 版本、机理设置是否匹配。
+若要运行模型，请在目标环境中按实际入口补齐依赖，并注意 `core/solver.so`、`core/solver2.so`、`core/solver.pyd` 与 `core/solver2.pyd` 与运行平台、Python 版本、机理设置是否匹配。
 
 ## 核心计算流程
 
@@ -94,22 +92,6 @@ RIR 主链路：
 - 修复桌面 UI 对 `media/` 图片资源与 RIR 模块的路径引用。
 - 修复 EKMA 收尾音效对 `tool/ffVII_victory.wav` 的路径引用。
 - 将核心求解与机理初始化相关文件从 `tool/` 移动到 `core/`：`AddSpecies.py`、`CovertHumidity.py`、`NumberDensity.py`、`dydt_eval.py`、`Jac_eval.py`、`ode15s.py`、`jit_solver.py`、`julia_solver.py` 以及求解器动态库。
-
-## 轻量验证
-
-已执行纯语法编译检查：
-
-```bash
-python3 - <<'PY'
-import pathlib, py_compile
-for p in sorted(pathlib.Path('.').rglob('*.py')):
-    if any(part in {'.git', '__pycache__'} for part in p.parts):
-        continue
-    py_compile.compile(str(p), doraise=True)
-PY
-```
-
-验证结果：所有 Python 文件均通过编译检查。
 
 ## 注意事项
 

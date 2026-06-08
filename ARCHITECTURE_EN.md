@@ -1,6 +1,6 @@
 # OBM Program Architecture
 
-This document describes the main modules, entry points, and call relationships in the Python OBM project. Large `txt` and `m` files under `CB05/` and `MCMv331/` were intentionally not inspected during this cleanup.
+This document describes the main modules, entry points, and call relationships in the Python OBM project.
 
 ## Overview
 

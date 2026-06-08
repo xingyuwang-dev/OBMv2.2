@@ -6,8 +6,6 @@ This repository contains a Python port of an atmospheric chemistry box model (OB
 - `online_app/`: Linux/server gRPC service used by backend systems.
 - `desktop_app/`: PyQt6 desktop application wrapper.
 
-During this cleanup, large `txt` and `m` mechanism files under `CB05/` and `MCMv331/` were intentionally not inspected. No packages or libraries were installed.
-
 ## Repository Layout
 
 | Path | Purpose |
@@ -61,7 +59,7 @@ There is no dependency lock file in this repository. Based on static imports, th
 - Desktop UI: `PyQt6`
 - Optional/helper features: `pyaudio`, `pygame`, `diffeqpy`, `numba`
 
-No dependencies were installed as part of this cleanup. Before running the model, install the appropriate dependencies in the target environment and verify that `core/solver.so`, `core/solver2.so`, `core/solver.pyd`, and `core/solver2.pyd` match the platform, Python version, and mechanism settings.
+Before running the model, install the appropriate dependencies in the target environment and verify that `core/solver.so`, `core/solver2.so`, `core/solver.pyd`, and `core/solver2.pyd` match the platform, Python version, and mechanism settings.
 
 ## Main Workflows
 
@@ -94,22 +92,6 @@ See [ARCHITECTURE_EN.md](ARCHITECTURE_EN.md) for the English architecture docume
 - Fixed desktop UI references to image assets in `media/` and to the desktop RIR module.
 - Fixed EKMA victory-sound paths so they point to `tool/ffVII_victory.wav`.
 - Moved core solver and chemistry-initialization files from `tool/` to `core/`: `AddSpecies.py`, `CovertHumidity.py`, `NumberDensity.py`, `dydt_eval.py`, `Jac_eval.py`, `ode15s.py`, `jit_solver.py`, `julia_solver.py`, and the compiled solver binaries.
-
-## Lightweight Verification
-
-The following syntax-only check was run:
-
-```bash
-python3 - <<'PY'
-import pathlib, py_compile
-for p in sorted(pathlib.Path('.').rglob('*.py')):
-    if any(part in {'.git', '__pycache__'} for part in p.parts):
-        continue
-    py_compile.compile(str(p), doraise=True)
-PY
-```
-
-Result: all Python files passed compilation.
 
 ## Notes
 
