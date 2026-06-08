@@ -12,12 +12,12 @@ from os.path import exists, dirname
 from numpy import tile, zeros, array, ones, sum, linspace, floor, r_, median, diff
 from tool.Check4NanNeg import Check4NanNeg
 from warnings import warn
-from tool.NumberDensity import NumberDensity
-from tool.CovertHumidity import CovertHumidity
-from InitializeChemistry import InitializeChemistry
+from core.NumberDensity import NumberDensity
+from core.CovertHumidity import CovertHumidity
+from core.InitializeChemistry import InitializeChemistry
 from tool.victory import victory
-from tool.ode15s import solver, solver2
-from tool.jit_solver import solver3
+from core.ode15s import solver, solver2
+from core.jit_solver import solver3
 from json import dumps
 
 

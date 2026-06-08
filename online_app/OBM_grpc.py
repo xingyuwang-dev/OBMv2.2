@@ -1,10 +1,13 @@
 from concurrent import futures
-from online_app import OBM_EKMA_1day_grpc
-import OBM_RIR_grpc
+try:
+    from online_app import OBM_EKMA_1day_grpc, OBM_RIR_grpc, receiver_pb2, receiver_pb2_grpc
+except ImportError:
+    import OBM_EKMA_1day_grpc
+    import OBM_RIR_grpc
+    import receiver_pb2
+    import receiver_pb2_grpc
 import time
 import grpc
-import receiver_pb2
-import receiver_pb2_grpc
 from json import loads
 import uuid
 import platform

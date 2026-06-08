@@ -14,6 +14,8 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+!core/solver.pyd
+!core/solver2.pyd
 .Python
 
 # ===== OS =====

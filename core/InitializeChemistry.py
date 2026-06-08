@@ -1,6 +1,6 @@
 from numpy import array, ones, tile, argwhere
 from collections import Counter, defaultdict
-from tool.AddSpecies import AddSpecies
+from core.AddSpecies import AddSpecies
 from importlib import import_module
 from MCMv331.MCMv331_K import MCMv331_K
 from MCMv331.MCMv331_J import MCMv331_J
@@ -95,7 +95,7 @@ def InitializeChemistry(Met, ChemFiles, *firstCall):
     if len(ChemFiles[1]) != 0:  # 计算光解速率j值
         J = eval(ChemFiles[1])  # very dangerous syntax  # J={'':,}
         jval = array(list(J.values())).T  # after python3.6 dict is ordered!!! #jval.shape -> (x,len(J))
-        Jnames = J.keys()
+        Jnames = list(J.keys())
         if firstCall:  # 这个判断的主要作用是通过jcorr与输入Met中的光解速率对计算得到的j值进行校正
             jcorr_all = ones(jval.shape)  # if len(jval.shape==2) else np.ones([jval.shape[0],1])
             sec = list(set(Jnames).intersection(set(Mnames)))  # 判断Met中有哪些光解速率需要去替换j中的

@@ -157,4 +157,4 @@ if __name__ == "__main__":
     end_time = datetime.now()
     cost_seconds = (end_time - start_time).seconds
     log_write(log_file, f"Total cost time: {cost_seconds}s.\n")  # 写入log总花费时间
-    victory(dirname(__file__) + sep + "tool" + sep + "ffVII_victory.wav")  # 庆祝🎉
+    victory(dirname(dirname(__file__)) + sep + "tool" + sep + "ffVII_victory.wav")  # 庆祝🎉

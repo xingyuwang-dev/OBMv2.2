@@ -2,7 +2,10 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import receiver_pb2 as receiver__pb2
+try:
+    from online_app import receiver_pb2 as receiver__pb2
+except ImportError:
+    import receiver_pb2 as receiver__pb2
 
 
 class ReceiverStub(object):

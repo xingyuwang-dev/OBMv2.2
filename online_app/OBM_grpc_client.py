@@ -1,8 +1,11 @@
 from json import dumps
 from pandas import read_csv
 import grpc
-import receiver_pb2
-import receiver_pb2_grpc
+try:
+    from online_app import receiver_pb2, receiver_pb2_grpc
+except ImportError:
+    import receiver_pb2
+    import receiver_pb2_grpc
 
 # 此脚本为测试OBM_grpc.py是否正常工作的脚本，即模拟后端发送数据给OBM_grpc.py
 # 在此可以详细了解后端发送的请求包含哪些东西

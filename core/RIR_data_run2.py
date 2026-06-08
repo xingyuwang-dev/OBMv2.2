@@ -5,7 +5,7 @@ from copy import deepcopy
 from json import dumps, load
 from numpy import append
 from os import sep
-from core.P_O3subNO import P_O3subNO
+from post_process.P_O3subNO import P_O3subNO
 from pandas import DataFrame
 
 # 此为RIR模块的的运算模块，用于预热模式，更新模式，情景削减模式

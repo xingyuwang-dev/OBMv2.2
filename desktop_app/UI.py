@@ -4,12 +4,13 @@ from PyQt6.QtWidgets import QApplication, QPushButton, QCheckBox, \
 from PyQt6.QtGui import QPainter, QPixmap, QMovie  # 构成UI界面的基本组件
 from PyQt6.QtCore import Qt, QRect, QTimer, QThread, QObject, pyqtSignal, QSettings, \
     QDir  # Do not using fucking sub-class of QThread
-from os.path import dirname, sep  # dirname可以获得python运行的绝对路径
+from os.path import dirname, exists, sep  # dirname可以获得python运行的绝对路径
 from time import sleep
 import uuid  # 获取UUID
 import platform  # 获取平台类型
 import hashlib  # 将组合的字符串计算hash值
 
+MEDIA_PATH = dirname(dirname(__file__)) + sep + "media"
 send_dict, Width, Height = {}, 1440, 900  # 传递的参数，主界面宽度，主界面高度
 
 
@@ -217,7 +218,7 @@ class Example(QFrame):
     def paintEvent(self, event):  # 当继承于Widget时，重载此方法设置
         painter = QPainter(self)
         painter.drawRect(self.rect())
-        pixmap = QPixmap(dirname(__file__) + sep + "poster_mars_front_c.jpg")
+        pixmap = QPixmap(MEDIA_PATH + sep + "poster_mars_front_c.jpg")
         painter.drawPixmap(self.rect(), pixmap)
 
     def closeEvent(self, event) -> None:  # 关闭QWidget会产生QCloseEvent事件
@@ -330,17 +331,20 @@ class Example2(QFrame):  # 该类是用于设置进度条界面
     def initUI(self):  # 进度条页面初始化函数
         self.setFixedSize(self.WIDTH, self.HEIGHT)
         self.setStyleSheet("background-color: rgba(70, 130, 180, 0.7);")
-        pix = QPixmap(dirname(__file__) + sep + "beyond.jpeg")
-        gif = QMovie(dirname(__file__) + sep + "go.gif")
+        pix = QPixmap(MEDIA_PATH + sep + "beyond.jpeg")
+        gif_file = MEDIA_PATH + sep + "go.gif"
+        gif = QMovie(gif_file) if exists(gif_file) else None
         label = QLabel(self)
         label.setPixmap(pix)
         label.setScaledContents(True)
         label.setGeometry(QRect(150, 25, 300, 250))
         label2 = QLabel(self)
-        label2.setMovie(gif)
+        if gif is not None:
+            label2.setMovie(gif)
         label2.setScaledContents(True)
         label2.setGeometry(QRect(300, 300, 120, 90))
-        gif.start()
+        if gif is not None:
+            gif.start()
 
         self.label_info = QLabel("", self)
         self.label_info.setGeometry(50, 300, 300, 30)
@@ -439,7 +443,7 @@ class Worker(QObject):  # 该类是用来调用OBM模型的类
                 from desktop_app.OBM_EKMA_1day2 import EKMA_start
                 symbol = EKMA_start(send_dict)
             if send_dict["RIR"]:
-                from OBM_RIR2 import RIR_start
+                from desktop_app.OBM_RIR2 import RIR_start
                 symbol = RIR_start(send_dict)
             self.signal.emit(symbol)
         except Exception as e:
@@ -453,7 +457,7 @@ def main():  # 该函数用于调用程序启动页面，调用程序主页面�
     Width, Height = size.width(), size.height()
     splash = SplashScreen()
     width, height = 500, 750
-    splash.setPixmap(QPixmap(dirname(__file__) + sep + "ice.jpeg").scaled(width, height))
+    splash.setPixmap(QPixmap(MEDIA_PATH + sep + "ice.jpeg").scaled(width, height))
     # splash.showMessage("")
     screen = QApplication.primaryScreen().geometry()
     left = int((screen.width() - width) / 2)

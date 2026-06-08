@@ -7,10 +7,10 @@
 from datetime import datetime
 from numpy import tile, zeros, array, sum
 from warnings import warn
-from tool.NumberDensity import NumberDensity
-from tool.CovertHumidity import CovertHumidity
-from InitializeChemistry import InitializeChemistry
-from tool.jit_solver import solver3
+from core.NumberDensity import NumberDensity
+from core.CovertHumidity import CovertHumidity
+from core.InitializeChemistry import InitializeChemistry
+from core.jit_solver import solver3
 
 
 # 该模块为精简化的F0AM_ModelCore, 拆分为了两个子模块：1:F0AM_ModelCore_read，2:F0AM_ModelCore_calculate，前者通过

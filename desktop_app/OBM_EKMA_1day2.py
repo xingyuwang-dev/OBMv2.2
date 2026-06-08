@@ -190,5 +190,5 @@ def EKMA_start(send_dict):
     end_time = datetime.now()
     cost_seconds = (end_time - start_time).seconds
     log_write(log_file, f"Total cost time: {cost_seconds}s.\n")
-    victory(dirname(__file__) + sep + "tool" + sep + "ffVII_victory.wav")
+    victory(dirname(dirname(__file__)) + sep + "tool" + sep + "ffVII_victory.wav")
     return "1"  # 返回UI "1"
