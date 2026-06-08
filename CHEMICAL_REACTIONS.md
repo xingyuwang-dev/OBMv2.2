@@ -257,13 +257,13 @@ $$
 
 ## RIR Definition
 
-For a precursor group \(X\), relative incremental reactivity is computed from the change in ozone production after reducing \(X\). For a 10% reduction:
+For a precursor group \(X\), relative incremental reactivity is computed from the change in ozone production after reducing \(X\). For a 10% reduction, the reduced case is written as \(0.9X\):
 
 $$
 \begin{aligned}
 \mathrm{RIR}_X
 &=
-\frac{P(O_3)_{\mathrm{base}}-P(O_3)_{X-10\%}}
+\frac{P(O_3)_{\mathrm{base}}-P(O_3)_{0.9X}}
 {P(O_3)_{\mathrm{base}}}
 \times 10.
 \end{aligned}
