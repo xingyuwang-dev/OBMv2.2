@@ -1,10 +1,10 @@
 from pandas import read_csv, DataFrame
 from datetime import datetime
-from os.path import exists, dirname
+from os.path import exists
 from os import sep, makedirs, getpid, getppid
 from json import loads
-from RIR_data_process import data_processed
-from RIR_data_run2 import initialize, update, initialize_update
+from core.RIR_data_process import data_processed
+from core.RIR_data_run2 import initialize, update, initialize_update
 from tool.data_split import do_split
 from copy import deepcopy
 from sys import exit

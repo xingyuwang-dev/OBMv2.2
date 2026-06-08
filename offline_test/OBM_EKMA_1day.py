@@ -5,7 +5,7 @@ from os import makedirs,sep
 from os.path import exists,dirname
 from sys import exit
 from tool.sun_position import sun_position
-from data_run import data_run
+from core.data_run import data_run
 from copy import deepcopy
 from tool.plot import plot_EKMA
 from tool.data_average import do_mean, calculate_noxvoc

@@ -1,4 +1,4 @@
-from RIR_data_process import data_processed
+from core.RIR_data_process import data_processed
 from warnings import simplefilter
 simplefilter("ignore")
 

@@ -1,8 +1,6 @@
 from sys import exit, argv  # 引入exit， argv函数。exit用于退出python程序，argv判断输入参数
 from PyQt6.QtWidgets import QApplication, QPushButton, QCheckBox, \
     QMessageBox, QFileDialog, QLineEdit, QGridLayout, QLabel, QFrame, QSplashScreen, QVBoxLayout  # 构成UI界面的基本组件
-# from PyQt6.QtMultimedia import QMediaPlayer, QAudioOutput
-# from PyQt6.QtMultimediaWidgets import QVideoWidget
 from PyQt6.QtGui import QPainter, QPixmap, QMovie  # 构成UI界面的基本组件
 from PyQt6.QtCore import Qt, QRect, QTimer, QThread, QObject, pyqtSignal, QSettings, QDir  # Do not using fucking sub-class of QThread
 from os.path import dirname, sep  # dirname可以获得python运行的绝对路径
@@ -434,7 +432,7 @@ class Worker(QObject):  # 该类是用来调用OBM模型的类
         global send_dict
         try:
             if send_dict["EKMA"]:
-                from OBM_EKMA_1day2 import EKMA_start
+                from desktop_app.OBM_EKMA_1day2 import EKMA_start
                 symbol = EKMA_start(send_dict)
             if send_dict["RIR"]:
                 from OBM_RIR2 import RIR_start

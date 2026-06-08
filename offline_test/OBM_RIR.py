@@ -3,8 +3,8 @@ from datetime import datetime, timedelta
 from os import makedirs, sep
 from os.path import exists
 from sys import exit
-from RIR_data_process import data_processed
-from RIR_data_run2 import initialize, update
+from core.RIR_data_process import data_processed
+from core.RIR_data_run2 import initialize, update
 from tool.data_average import do_mean
 import csv
 from tool import plot_ozone, plot_OH, plot_photolysis

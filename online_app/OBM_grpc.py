@@ -1,5 +1,5 @@
 from concurrent import futures
-import OBM_EKMA_1day_grpc
+from online_app import OBM_EKMA_1day_grpc
 import OBM_RIR_grpc
 import time
 import grpc

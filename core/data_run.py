@@ -1,8 +1,8 @@
 #from F0AM_ModelCore import F0AM_ModelCore
-from F0AM_ModelCore2 import F0AM_ModelCore_read, F0AM_ModelCore_calculate
+from core.F0AM_ModelCore2 import F0AM_ModelCore_read, F0AM_ModelCore_calculate
 from copy import deepcopy
 from multiprocessing import Pool, cpu_count, freeze_support
-from IOA import calculate_IOA
+from tool.IOA import calculate_IOA
 
 
 # 该模块被EKMA模块调用，是介于EKMA模块与F0AM_ModelCore模型的中间层，用于调用后者；其工作方式为接受必要的参数，如气象，监测物质浓度，
