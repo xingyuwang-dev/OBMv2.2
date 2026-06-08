@@ -13,7 +13,7 @@ $$
 where species concentrations are represented internally in molecules per cubic centimeter:
 
 $$
-[X]_{\mathrm{molec/cm^3}}
+[X]_{\text{molec}/\text{cm}^3}
 = [X]_{\mathrm{ppb}} \times M \times 10^{-9}.
 $$
 
@@ -86,7 +86,7 @@ The concentration tendency for species \(i\) is
 $$
 \frac{dC_i}{dt}
 = \sum_{r=1}^{N_r} \nu_{ri} R_r
-- k_{\mathrm{dil}}\left(C_i-C_{i,\mathrm{bkgd}}\right).
+- k_{\mathrm{dil}}\left(C_i-C_{i,\text{bkgd}}\right).
 $$
 
 In matrix form:
@@ -94,7 +94,7 @@ In matrix form:
 $$
 \frac{d\mathbf{C}}{dt}
 = \mathbf{R}^{\mathsf{T}}\mathbf{f}
-- k_{\mathrm{dil}}\left(\mathbf{C}-\mathbf{C}_{\mathrm{bkgd}}\right).
+- k_{\mathrm{dil}}\left(\mathbf{C}-\mathbf{C}_{\text{bkgd}}\right).
 $$
 
 For species marked as held species (`iHold`), the model sets
@@ -146,22 +146,24 @@ $$
 When `FixNOx` is enabled, NO and NO2 are rescaled to preserve the prescribed total NOx while keeping the modeled partitioning:
 
 $$
-\mathbf{C}_{\mathrm{NOx,new}}
-= \mathbf{C}_{\mathrm{NOx,model}}
+\mathbf{C}_{\text{NOx,new}}
+= \mathbf{C}_{\text{NOx,model}}
 \times
-\frac{\sum \mathbf{C}_{\mathrm{NOx,init}}}
-{\sum \mathbf{C}_{\mathrm{NOx,model}}}.
+\frac{\sum \mathbf{C}_{\text{NOx,init}}}
+{\sum \mathbf{C}_{\text{NOx,model}}}.
 $$
 
 This corresponds to the code path:
 
 $$
-\left([\mathrm{NO}], [\mathrm{NO_2}]\right)_{\mathrm{new}}
-=
-\left([\mathrm{NO}], [\mathrm{NO_2}]\right)_{\mathrm{model}}
+\begin{aligned}
+\left([\mathrm{NO}], [\mathrm{NO_2}]\right)_{\text{new}}
+&=
+\left([\mathrm{NO}], [\mathrm{NO_2}]\right)_{\text{model}}
 \times
-\frac{[\mathrm{NO}]_{\mathrm{init}}+[\mathrm{NO_2}]_{\mathrm{init}}}
-{[\mathrm{NO}]_{\mathrm{model}}+[\mathrm{NO_2}]_{\mathrm{model}}}.
+\frac{[\mathrm{NO}]_{\text{init}}+[\mathrm{NO_2}]_{\text{init}}}
+{[\mathrm{NO}]_{\text{model}}+[\mathrm{NO_2}]_{\text{model}}}.
+\end{aligned}
 $$
 
 ## Ozone Production and Loss Diagnostics
@@ -170,17 +172,22 @@ $$
 
 $$
 P_{\mathrm{HO_2+NO}}
-= k_{\mathrm{HO_2+NO}}[\mathrm{HO_2}][\mathrm{NO}]M\Delta t,
+= k_{\mathrm{HO_2+NO}}[\mathrm{HO_2}][\mathrm{NO}]M\Delta t.
 $$
 
 $$
+\begin{aligned}
 P_{\mathrm{RO_2+NO}}
-= \left(
+&=
+\Big(
 k_{\mathrm{XO2+NO}}[\mathrm{XO2}]
-+ k_{\mathrm{XO2N+NO}}[\mathrm{XO2N}]
++ k_{\mathrm{XO2N+NO}}[\mathrm{XO2N}] \\
+&\quad
 + k_{\mathrm{MEO2+NO}}[\mathrm{MEO2}]
 + k_{\mathrm{TO2+NO}}[\mathrm{TO2}]
-\right)[\mathrm{NO}]M\Delta t.
+\Big)
+[\mathrm{NO}]M\Delta t.
+\end{aligned}
 $$
 
 Thus
@@ -192,39 +199,47 @@ $$
 The diagnostic ozone loss terms include:
 
 $$
-L_{\mathrm{O_3 photolysis}} = J_{\mathrm{O_3\rightarrow O(^1D)}}[\mathrm{O_3}]\Delta t,
+L_{\text{O}_3\text{ photolysis}}
+= J_{\mathrm{O_3\rightarrow O(^1D)}}[\mathrm{O_3}]\Delta t.
 $$
 
 $$
-L_{\mathrm{O_3+OH}} = k_{\mathrm{O_3+OH}}[\mathrm{O_3}][\mathrm{OH}]M\Delta t,
+L_{\mathrm{O_3+OH}}
+= k_{\mathrm{O_3+OH}}[\mathrm{O_3}][\mathrm{OH}]M\Delta t.
 $$
 
 $$
-L_{\mathrm{O_3+HO_2}} = k_{\mathrm{O_3+HO_2}}[\mathrm{O_3}][\mathrm{HO_2}]M\Delta t,
+L_{\mathrm{O_3+HO_2}}
+= k_{\mathrm{O_3+HO_2}}[\mathrm{O_3}][\mathrm{HO_2}]M\Delta t.
 $$
 
 $$
-L_{\mathrm{NO_2+OH}} = k_{\mathrm{NO_2+OH}}[\mathrm{NO_2}][\mathrm{OH}]M\Delta t,
+L_{\mathrm{NO_2+OH}}
+= k_{\mathrm{NO_2+OH}}[\mathrm{NO_2}][\mathrm{OH}]M\Delta t.
 $$
 
 and alkene ozonolysis:
 
 $$
+\begin{aligned}
 L_{\mathrm{alkene+O_3}}
-=
-\left(
+&=
+\Big(
 k_{\mathrm{IOLE+O_3}}[\mathrm{IOLE}]
-+ k_{\mathrm{OLE+O_3}}[\mathrm{OLE}]
++ k_{\mathrm{OLE+O_3}}[\mathrm{OLE}] \\
+&\quad
 + k_{\mathrm{ETH+O_3}}[\mathrm{ETH}]
 + k_{\mathrm{ISOP+O_3}}[\mathrm{ISOP}]
 + k_{\mathrm{TERP+O_3}}[\mathrm{TERP}]
-\right)[\mathrm{O_3}]M\Delta t.
+\Big)
+[\mathrm{O_3}]M\Delta t.
+\end{aligned}
 $$
 
 The net diagnostic ozone tendency is
 
 $$
-P(O_3)-L(O_3).
+\Delta O_3 = P(O_3)-L(O_3).
 $$
 
 In the current RIR diagnostics, \(\Delta t=3600\ \mathrm{s}\).
@@ -245,11 +260,13 @@ $$
 For a precursor group \(X\), relative incremental reactivity is computed from the change in ozone production after reducing \(X\). For a 10% reduction:
 
 $$
+\begin{aligned}
 \mathrm{RIR}_X
-=
+&=
 \frac{P(O_3)_{\mathrm{base}}-P(O_3)_{X-10\%}}
 {P(O_3)_{\mathrm{base}}}
 \times 10.
+\end{aligned}
 $$
 
 The code applies the same form to CO, NOx, VOCs, olefins, aromatics, and OVOCs.
