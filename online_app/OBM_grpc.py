@@ -10,6 +10,7 @@ import uuid
 import platform
 import hashlib
 from sys import exit
+
 #  😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊😊
 
 
@@ -57,7 +58,7 @@ def serve():
 
 def macid():  # 获得电脑，服务器的标识符
     mac = uuid.UUID(int=uuid.getnode()).hex[-12:].upper()
-    mac = "@".join([mac[i:i+2] for i in range(0, 11, 2)])
+    mac = "@".join([mac[i:i + 2] for i in range(0, 11, 2)])
     return mac
 
 

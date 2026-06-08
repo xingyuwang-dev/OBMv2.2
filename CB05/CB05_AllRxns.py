@@ -38,7 +38,7 @@ def calculate_f(Cnames: list, m: int):  # 计算稀疏矩阵
         for l in f:
             Rnames_list.append(l.strip().split(" "))
     Cnames_dict = {i: Cnames.index(i) for i in Cnames}
-    f = dok_matrix((m, len(Cnames)))#shape -> (nRx,nSp)
+    f = dok_matrix((m, len(Cnames)))  # shape -> (nRx,nSp)
     i = 0
     with open(file, "r", encoding="utf-8") as f_:
         for l in f_:
@@ -63,7 +63,7 @@ def get_Rnames():  # 获得每个反应的反应方程式，没啥用
     return Rnames
 
 
-def get_Gnames(): # 获取每个反应的反应物
+def get_Gnames():  # 获取每个反应的反应物
     file = dirname(__file__) + sep + "G.txt"
     try:
         with open(file, "r", encoding="utf-8") as f:
@@ -90,7 +90,7 @@ def change7(string: str):  # 如果某个反应反应物只有1个，则添加�
 
 
 def get_SpeciesToAdd():  # 返回化学机理中涉及到的所有物质
-    #SpeciesToAdd = ["NO", "NO2", "NO3", "N2O5", "HNO3", "HONO", "PNA", "O3P", "O1D", "O3", "OH", "HO2", "H2", "CO",
+    # SpeciesToAdd = ["NO", "NO2", "NO3", "N2O5", "HNO3", "HONO", "PNA", "O3P", "O1D", "O3", "OH", "HO2", "H2", "CO",
     #                "CH4", "MEO2", "FORM", "NTR", "ALD2", "ALDX", "PAR", "ROOH", "XO2", "MEPX", "MEOH", "C2O3", "CXO3",
     #                "PAN", "PANX", "PACD", "AACD", "FACD", "XO2N", "ROR", "ETH", "OLE", "IOLE", "ISOP", "ISPD", "MGLY",
     #                "TOL", "CRES", "TO2", "OPEN", "CRO", "XYL", "TERP", "ETOH", "ETHA", "H2O2", "HCO3", "SO2", "SULF"]

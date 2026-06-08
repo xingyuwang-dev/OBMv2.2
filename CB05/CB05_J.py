@@ -3,11 +3,11 @@ from photolysis.J_Hybrid import J_Hybrid_new  # 导入J_Hybrid_new函数
 from MCMv331.MCMv331_J import MCMv331_J  # 导入 MCMv331_J函数
 
 
-#def CB05_J(Met,Jmethod)->J:
-#Calculates photolysis frequencies for CB05
+# def CB05_J(Met,Jmethod)->J:
+# Calculates photolysis frequencies for CB05
 #
-#INPUTS:
-#Met: structure containing required meteorological constrains, Require vars depend on Jmethod
+# INPUTS:
+# Met: structure containing required meteorological constrains, Require vars depend on Jmethod
 #  Met.SZA: solar zenith angle in degree
 #  Met.ALT: altitude, meters
 #  Met.O3col: overhead zone column, DU
@@ -15,7 +15,7 @@ from MCMv331.MCMv331_J import MCMv331_J  # 导入 MCMv331_J函数
 #  Met.P: pressure, mbar
 #  Met.LFlux: name of a text file containing an actinic flux spectrum
 #
-#JMthod: numeric flag or string specifying how to calculate J_value. Default is "MCM".
+# JMthod: numeric flag or string specifying how to calculate J_value. Default is "MCM".
 #  0 or "MCM": use MCM3.3.1 parameterization. some reactions are not included in MCM. For these, "HYBRID" values are used.
 #          required Met fields: SZA
 #  1 or "BOTTOM": bottom-up integration of cross sections/quantum yields.
@@ -25,12 +25,12 @@ from MCMv331.MCMv331_J import MCMv331_J  # 导入 MCMv331_J函数
 #          see J_TUVhybrid.m for more info.
 #          required Met fields: SZA,ALT,O3col,albedo
 #
-#OUTPUTS:
-#J: structure of J-values.
+# OUTPUTS:
+# J: structure of J-values.
 #
-#20150618 GMW
-#20160131 GMW Minor change to names for HCHO to match CB05 doc.
-#20160304 GMW Changed output from name/value pairs to structure, added Jmethod.
+# 20150618 GMW
+# 20160131 GMW Minor change to names for HCHO to match CB05 doc.
+# 20160304 GMW Changed output from name/value pairs to structure, added Jmethod.
 
 
 # 上面英文的脚本是来源于matlab的F0AM_Model，便于开发人员对照原有m文件进行修改；
@@ -40,12 +40,12 @@ from MCMv331.MCMv331_J import MCMv331_J  # 导入 MCMv331_J函数
 
 
 def CB05_J(Met: dict, Jmethod="MCM"):
-    Jmethod=str(Jmethod).upper()
+    Jmethod = str(Jmethod).upper()
 
     try:  # 读取Met下的albedo，SZA，ALT，O3col等变量
-        #T = array(Met["T"])
-        #P = array(Met["P"])
-        #LFlux = Met["LFlux"]
+        # T = array(Met["T"])
+        # P = array(Met["P"])
+        # LFlux = Met["LFlux"]
         albedo = Met["albedo"]
         SZA = array(Met["SZA"])
         ALT = array(Met["ALT"])
@@ -58,19 +58,20 @@ def CB05_J(Met: dict, Jmethod="MCM"):
         # also need hybrid values for non-MCM species
         # override Met inputs to match hibrid and MCM J's (See Fig.2 in description paper)
 
-        ALT = ones(SZA.shape)*500 #meters
-        O3col = ones(SZA.shape)*350 #DU
-        albedo = ones(SZA.shape)*0.01 #unitless
+        ALT = ones(SZA.shape) * 500  # meters
+        O3col = ones(SZA.shape) * 350  # DU
+        albedo = ones(SZA.shape) * 0.01  # unitless
         Jhyb = J_Hybrid_new(SZA, ALT, O3col, albedo)
     elif Jmethod == "1" or Jmethod == "BOTTOMUP":  # 尚未开发
-        #TODO Jmcm=J_BottomUp(LFlux,T,P)
-        #TODO Jhyb=Jmcm
+        # TODO Jmcm=J_BottomUp(LFlux,T,P)
+        # TODO Jhyb=Jmcm
         raise ValueError("J_BottomUp function did not implemented")
     elif Jmethod == "2" or Jmethod == "HYBRID":  # 如果采用HYBRID方法，利用输入的Met的参数计算光解速率
-        Jmcm=J_Hybrid_new(SZA, ALT, O3col, albedo)
-        Jhyb=Jmcm
+        Jmcm = J_Hybrid_new(SZA, ALT, O3col, albedo)
+        Jhyb = Jmcm
     else:
-        raise ValueError(f"MCMv331_J: invalid Jmethod {Jmethod}. Valid options are 'MCM' (0), 'BOTTOMUP' (1), 'HYBRID' (2).")
+        raise ValueError(
+            f"MCMv331_J: invalid Jmethod {Jmethod}. Valid options are 'MCM' (0), 'BOTTOMUP' (1), 'HYBRID' (2).")
 
     J = {"JNO2": Jmcm["J4"], "JNO3_NO": Jmcm["J5"], "JNO3_NO2": Jmcm["J6"],  # 将许多光解速率映射为字典
          "JHNO3": Jmcm["J8"], "JO3P": Jmcm["J2"], "JO1D": Jmcm["J1"],

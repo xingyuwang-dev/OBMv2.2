@@ -1,9 +1,8 @@
-#from F0AM_ModelCore import F0AM_ModelCore
+# from F0AM_ModelCore import F0AM_ModelCore
 from core.F0AM_ModelCore2 import F0AM_ModelCore_read, F0AM_ModelCore_calculate
 from copy import deepcopy
 from multiprocessing import Pool, cpu_count, freeze_support
 from tool.IOA import calculate_IOA
-
 
 # 该模块被EKMA模块调用，是介于EKMA模块与F0AM_ModelCore模型的中间层，用于调用后者；其工作方式为接受必要的参数，如气象，监测物质浓度，
 # 需要调用的机理，背景浓度控制，VOCs情景，NOx情景，迭代控制参数。
@@ -21,11 +20,12 @@ def columns(columns, iHold):  # 该函数用于添加控制符iHold，在F0AM_Mo
     return [0 if i in {"O3", "NO", "NO2", "CO"} else iHold for i in columns]
 
 
-def data_run(Met, data, ChemFiles ,BkgdConc, ModelOptions, I_ARRAY, J_ARRAY, iHold=0, multi_process=True, CPU=cpu_count()):
+def data_run(Met, data, ChemFiles, BkgdConc, ModelOptions, I_ARRAY, J_ARRAY, iHold=0, multi_process=True,
+             CPU=cpu_count()):
     freeze_support()  # 不要删，有一些奇妙的作用
     kdil = Met["kdil"]
     if multi_process:
-        CPU = CPU if CPU < len(I_ARRAY)*len(J_ARRAY) else len(I_ARRAY)*len(J_ARRAY)
+        CPU = CPU if CPU < len(I_ARRAY) * len(J_ARRAY) else len(I_ARRAY) * len(J_ARRAY)
         pool = Pool(CPU)
 
     data_init = deepcopy(data)  # 深度复制，pandas方法为df.copy(deep=True)，为什么不用pandas的？当时没想到
@@ -90,10 +90,10 @@ def get_InitConc(data, i, j):
 
 def get_one(i_array, j_array):
     for index, i in enumerate(i_array):
-        if i<=1 and 1<i_array[index+1]:
+        if i <= 1 and 1 < i_array[index + 1]:
             I = index
     for index, j in enumerate(j_array):
-        if j<=1 and 1<j_array[index+1]:
+        if j <= 1 and 1 < j_array[index + 1]:
             J = index
 
     return I * len(j_array) + J + 1

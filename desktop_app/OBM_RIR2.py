@@ -7,7 +7,7 @@ from core.RIR_data_process import data_processed
 from core.RIR_data_run2 import initialize, update
 from tool.data_average import do_mean
 import csv
-from tool import plot_ozone, plot_OH, plot_photolysis
+from post_process import plot_ozone, plot_OH, plot_photolysis
 from functools import partial
 from tool.file_transform import file_transform
 
@@ -18,11 +18,11 @@ from tool.file_transform import file_transform
 
 def main(T=0, init=False):
     arg1, arg2 = [pressure, temperature, humidity], [kdil, bkgdconc, jcorr, o3col, albedo, linksteps, fixnox]
-    data = read_csv(data_file_,header=0,index_col=0)
-    data.index=to_datetime(data.index)
-    data.index=map(lambda x: x.strftime("%Y/%m/%d %H/%M"), data.index)
-    data=do_mean(data)
-    compound_name = read_csv(compound_name_file,header=None)
+    data = read_csv(data_file_, header=0, index_col=0)
+    data.index = to_datetime(data.index)
+    data.index = map(lambda x: x.strftime("%Y/%m/%d %H/%M"), data.index)
+    data = do_mean(data)
+    compound_name = read_csv(compound_name_file, header=None)
     if init:
         data2, time, climate = data_processed(data, compound_name, arg1)
     else:
@@ -38,7 +38,8 @@ def main(T=0, init=False):
         head1 = ["Time", "RO2", "OH", "HO2", "HONO"]
         head2 = ["Time", "O3_G", "O3_D", "HO2+NO", "RO2+NO", "O3_photolysis", "O3+OH", "O3+HO2", "NO2+OH", "O3+olefin"]
         head3 = ["Time", "CO_10", "NOx_10", "VOCs_10", "olefin_10", "aromatics_10", "ovocs_10"]
-        head4 = ["Time", "SO2", "Aromatics", "Alkanes", "Alkenes", "NO2", "HNO3", "NO", "HO2NO2", "HONO", "HO2", "CO", "CH4", "OVOCs"]
+        head4 = ["Time", "SO2", "Aromatics", "Alkanes", "Alkenes", "NO2", "HNO3", "NO", "HO2NO2", "HONO", "HO2", "CO",
+                 "CH4", "OVOCs"]
         head5 = ["Time", "NOx(-10%)", "NOx(-20%)", "NOx(-30%)", "VOCs(-10%)", "VOCs(-20%)", "VOCs(-30%)"]
         head6 = ["Time", "VOCs_NOx_10", "VOCs_NOx_20", "VOCs_NOx_30"]
         head7 = ["Time", "J_O1D", "J_HCHO_R", "J_HCHO_M", "J_NO2", "J_H2O2", "J_HONO", "J_NO3_b", "J_NO3_a"]
@@ -63,26 +64,27 @@ def main(T=0, init=False):
 
 def check_file(file):
     if not exists(file):
-        log_write(log_file,f"{file} not exists! exit!\n")
+        log_write(log_file, f"{file} not exists! exit!\n")
         exit()
 
 
-def log_write(log_file,msg):
-    with open(log_file,"a+") as f:
-        f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S ")+msg)
+def log_write(log_file, msg):
+    with open(log_file, "a+") as f:
+        f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S ") + msg)
 
 
 def write_csv(path, data, model="w"):
     with open(path, model, encoding="utf-8", newline="") as f:
         csv.writer(f).writerow(data)
 
-DATE = (datetime.now()+timedelta(days=-1)).strftime("%Y/%m/%d")
+
+DATE = (datetime.now() + timedelta(days=-1)).strftime("%Y/%m/%d")
 
 main_path = dirname(__file__)
-#data_file = main_path + sep + "data2.csv"
-#data_file_ = main_path + sep + "data2.csv"
+# data_file = main_path + sep + "data2.csv"
+# data_file_ = main_path + sep + "data2.csv"
 compound_name_file = main_path + sep + "comparison_table.csv"
-#save_path_ = main_path + sep + DATE
+# save_path_ = main_path + sep + DATE
 log_file = main_path + sep + "init_log.txt"
 log_file2 = main_path + sep + "update_log.txt"
 
@@ -93,7 +95,6 @@ data_file6 = "reactivity_of_OH_reaction.csv"
 data_file5 = "VOCssub_or_NOxsub.csv"
 data_file8 = "VOCssub_and_NOxsub.csv"
 data_file7 = "photolysis_rate.csv"
-
 
 check_file(main_path)
 check_file(compound_name_file)
@@ -126,7 +127,7 @@ def RIR_start(send_dict):
     temperature = check_parameter("temperature", -1, float)
     pressure = check_parameter("pressure", -1, float)
     humidity = check_parameter("humidity", -1, float)
-    kdil = check_parameter("kdil", 1/86400, float)
+    kdil = check_parameter("kdil", 1 / 86400, float)
     jcorr = check_parameter("jcorr", 1, float)
     bkgdconc = check_parameter("bkgdconc", 1, float)
     o3col = check_parameter("o3col", 300, int)
@@ -134,7 +135,6 @@ def RIR_start(send_dict):
     ihold = check_parameter("ihold", 1, int)
     linksteps = check_parameter("linksteps", 1, int)
     fixnox = check_parameter("fixnox", 0, int)
-
 
     if not exists(save_path):
         makedirs(save_path)
@@ -155,6 +155,6 @@ def RIR_start(send_dict):
     plot_photolysis.plot_photolysis(save_path + sep + data_file7, save_path)
 
     end_time = datetime.now()
-    cost_seconds = (end_time-start_time).seconds
+    cost_seconds = (end_time - start_time).seconds
     log_write(log_file2, f"Total cost time: {cost_seconds}s.\n")
     return "1"

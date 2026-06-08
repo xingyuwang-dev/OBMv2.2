@@ -2,13 +2,13 @@ from sys import exit, argv  # 引入exit， argv函数。exit用于退出python�
 from PyQt6.QtWidgets import QApplication, QPushButton, QCheckBox, \
     QMessageBox, QFileDialog, QLineEdit, QGridLayout, QLabel, QFrame, QSplashScreen, QVBoxLayout  # 构成UI界面的基本组件
 from PyQt6.QtGui import QPainter, QPixmap, QMovie  # 构成UI界面的基本组件
-from PyQt6.QtCore import Qt, QRect, QTimer, QThread, QObject, pyqtSignal, QSettings, QDir  # Do not using fucking sub-class of QThread
+from PyQt6.QtCore import Qt, QRect, QTimer, QThread, QObject, pyqtSignal, QSettings, \
+    QDir  # Do not using fucking sub-class of QThread
 from os.path import dirname, sep  # dirname可以获得python运行的绝对路径
 from time import sleep
 import uuid  # 获取UUID
 import platform  # 获取平台类型
 import hashlib  # 将组合的字符串计算hash值
-
 
 send_dict, Width, Height = {}, 1440, 900  # 传递的参数，主界面宽度，主界面高度
 
@@ -23,7 +23,7 @@ class Example(QFrame):
         self.initUI()
 
     def initUI(self):
-        #self.setToolTip("Maybe, Maybe not")
+        # self.setToolTip("Maybe, Maybe not")
 
         btn = QPushButton("DATA")
         btn.setToolTip("DATA is the King!")
@@ -37,9 +37,10 @@ class Example(QFrame):
         qss3 = "color:rgb(181,126,220);font-weight:bold;background:rgba(255,255,255,0.3)"
 
         Parameter = QLabel("PARAMETERS")
-        Parameter.setMaximumHeight(btn.height()-10)
+        Parameter.setMaximumHeight(btn.height() - 10)
         Parameter.setStyleSheet(qss2)
-        Parameter.setToolTip("To control the Model, all parameters have default values, so you don't have to set them all")
+        Parameter.setToolTip(
+            "To control the Model, all parameters have default values, so you don't have to set them all")
         Longitude = QLabel("Longitude")
         self.Longitude_input = QLineEdit()
         self.Longitude_input.setPlaceholderText("120.00")
@@ -225,7 +226,7 @@ class Example(QFrame):
                                      QMessageBox.StandardButton.No, QMessageBox.StandardButton.No)
         if reply == QMessageBox.StandardButton.Yes:
             event.accept()
-            #self.win2.close()
+            # self.win2.close()
             exit(0)
         else:
             event.ignore()
@@ -279,9 +280,11 @@ class Example(QFrame):
                       "o3col": self.O3col_input.text(), "albedo": self.Albedo_input.text(),
                       "save_path": self.ftn3.text()}
         send_dict |= {"ihold": self.IHold_input.text(), "linksteps": self.Linksteps_input.text(),
-                      "fixnox": self.FixNox_input.text(), "I_ARRAY": self.NOx_input.text(), "J_ARRAY": self.VOCs_input.text(),
+                      "fixnox": self.FixNox_input.text(), "I_ARRAY": self.NOx_input.text(),
+                      "J_ARRAY": self.VOCs_input.text(),
                       "data2": self.ftn2.text(), "EKMA": self.check.isChecked(), "RIR": self.check2.isChecked(),
-                      "single": self.check3.isChecked(), "ridge": self.check4.isChecked(), "move": self.move_ridge_input.text()}
+                      "single": self.check3.isChecked(), "ridge": self.check4.isChecked(),
+                      "move": self.move_ridge_input.text()}
 
         self.simulation_thread.started.connect(self.simulation.do_work)  # 直接用lambda传参给子线程会出现奇怪的子页面卡顿
         self.simulation_thread.start()
@@ -341,13 +344,14 @@ class Example2(QFrame):  # 该类是用于设置进度条界面
 
         self.label_info = QLabel("", self)
         self.label_info.setGeometry(50, 300, 300, 30)
-        self.label_info.setStyleSheet("color:rgb(255,255,255);font-weight:bold;font-size:20px;background:rgba(255,255,255,0)")
+        self.label_info.setStyleSheet(
+            "color:rgb(255,255,255);font-weight:bold;font-size:20px;background:rgba(255,255,255,0)")
 
         left = int((Width - 600) / 2)
         up = int((Height - 400) / 2)
         self.setGeometry(left, up, self.WIDTH, self.HEIGHT)
         self.setWindowFlag(Qt.WindowType.FramelessWindowHint)
-        
+
     def show(self):  # 进度条页面显示时调用的函数
         self.label_info.setText("Starting...")
         super(Example2, self).show()
@@ -411,7 +415,7 @@ class SplashScreen(QSplashScreen):  # 该类用于程序启动界面
         vbox.addWidget(Label)
         vbox.addWidget(Label2)
         vbox.addWidget(Label3)
-        #Label.move(100, 200)#Label2.fontMetrics().boundingRect(Label.text()).width()
+        # Label.move(100, 200)#Label2.fontMetrics().boundingRect(Label.text()).width()
         Label4.move(10, 700)
         Label5.move(10, 735)
         vbox.setContentsMargins(0, 200, 0, 350)
@@ -450,7 +454,7 @@ def main():  # 该函数用于调用程序启动页面，调用程序主页面�
     splash = SplashScreen()
     width, height = 500, 750
     splash.setPixmap(QPixmap(dirname(__file__) + sep + "ice.jpeg").scaled(width, height))
-    #splash.showMessage("")
+    # splash.showMessage("")
     screen = QApplication.primaryScreen().geometry()
     left = int((screen.width() - width) / 2)
     up = int((screen.height() - height) / 2)
@@ -465,7 +469,7 @@ def main():  # 该函数用于调用程序启动页面，调用程序主页面�
 
 def macid():
     mac = uuid.UUID(int=uuid.getnode()).hex[-12:].upper()
-    mac = "@".join([mac[i:i+2] for i in range(0, 11, 2)])
+    mac = "@".join([mac[i:i + 2] for i in range(0, 11, 2)])
     string = "Laughing Out Loud " + mac + platform.uname().release
     obj = hashlib.md5()
     obj.update(string.encode("utf-8"))

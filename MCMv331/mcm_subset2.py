@@ -31,7 +31,7 @@ def calculate_f(Cnames: list, m: int):
         for l in f:
             Rnames_list.append(l.strip().split(" "))
     Cnames_dict = {i: Cnames.index(i) for i in Cnames}
-    f = dok_matrix((m, len(Cnames)))#shape -> (nRx,nSp)
+    f = dok_matrix((m, len(Cnames)))  # shape -> (nRx,nSp)
     i = 0
     with open(file, "r", encoding="utf-8") as f_:
         try:

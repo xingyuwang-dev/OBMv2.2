@@ -178,13 +178,14 @@ def MCMv331_K(Met):
     except:
         raise ValueError('MCMv331_K: InvalidInput, Check your Met data.')
 
-    Knames = ['KRO2NO', 'KRO2HO2', 'KAPHO2', 'KAPNO', 'KRO2NO3', 'KNO3AL', 'KDEC','KROPRIM', 'KROSEC', 'KCH3O2',
-              'K298CH3O2', 'K14ISOM1', 'KFPAN', 'KBPAN','KMT01', 'KMT02', 'KMT03', 'KMT04', 'KMT05', 'KMT06',
-              'KMT07', 'KMT08','KMT09', 'KMT10', 'KMT11', 'KMT12', 'KMT13', 'KMT14', 'KMT15', 'KMT16', 'KMT17','KMT18', 'KBPPN']
+    Knames = ['KRO2NO', 'KRO2HO2', 'KAPHO2', 'KAPNO', 'KRO2NO3', 'KNO3AL', 'KDEC', 'KROPRIM', 'KROSEC', 'KCH3O2',
+              'K298CH3O2', 'K14ISOM1', 'KFPAN', 'KBPAN', 'KMT01', 'KMT02', 'KMT03', 'KMT04', 'KMT05', 'KMT06',
+              'KMT07', 'KMT08', 'KMT09', 'KMT10', 'KMT11', 'KMT12', 'KMT13', 'KMT14', 'KMT15', 'KMT16', 'KMT17',
+              'KMT18', 'KBPPN']
     krx = [2.7e-12 * exp(360 / T), 2.91e-13 * exp(1300 / T), 5.2e-13 * exp(980 / T),
-           7.5e-12 * exp(290 / T), array([2.3e-12]*len(T)), 1.4e-12 * exp(-1860 / T),
-           array([1e6]*len(T)), 2.5e-14 * exp(-300 / T), 2.5e-14 * exp(-300 / T),
-           1.03e-13 * exp(365 / T), array([3.5e-13]*len(T)), 3e7 * exp(-5300 / T),
+           7.5e-12 * exp(290 / T), array([2.3e-12] * len(T)), 1.4e-12 * exp(-1860 / T),
+           array([1e6] * len(T)), 2.5e-14 * exp(-300 / T), 2.5e-14 * exp(-300 / T),
+           1.03e-13 * exp(365 / T), array([3.5e-13] * len(T)), 3e7 * exp(-5300 / T),
            KFPAN(T, M), KBPAN(T, M), KMT01(T, M),
            KMT02(T, M), KMT03(T, M), KMT04(T, M),
            1.44e-13 * (1 + (M / 4.2e19)), 1 + (1.40e-21 * exp(2200 / T) * H2O), KTM07(T, M),

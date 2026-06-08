@@ -7,7 +7,7 @@ from core.RIR_data_process import data_processed
 from core.RIR_data_run2 import initialize, update
 from tool.data_average import do_mean
 import csv
-from tool import plot_ozone, plot_OH, plot_photolysis
+from post_process import plot_ozone, plot_OH, plot_photolysis
 from tool.file_transform import file_transform
 
 
@@ -21,12 +21,12 @@ from tool.file_transform import file_transform
 
 
 def main(T_=0, init=False):
-    arg1, arg2 = [P, T, H], [kdil, bkgdconc, jcorr, 300,0.3,1,0]
-    data = read_csv(data_file_,header=0,index_col=0)  # 读取数据为DataFrame格式，设置列名为表头，索引为第一列
-    data.index=to_datetime(data.index)  # 将索引转化为时间格式
-    data.index=map(lambda x: x.strftime("%Y/%m/%d %H/%M"), data.index)  # 将索引转化为特定字符串格式
-    data=do_mean(data)  # 计算日平均值
-    compound_name = read_csv(compound_name_file,header=None)  # 读取对照表
+    arg1, arg2 = [P, T, H], [kdil, bkgdconc, jcorr, 300, 0.3, 1, 0]
+    data = read_csv(data_file_, header=0, index_col=0)  # 读取数据为DataFrame格式，设置列名为表头，索引为第一列
+    data.index = to_datetime(data.index)  # 将索引转化为时间格式
+    data.index = map(lambda x: x.strftime("%Y/%m/%d %H/%M"), data.index)  # 将索引转化为特定字符串格式
+    data = do_mean(data)  # 计算日平均值
+    compound_name = read_csv(compound_name_file, header=None)  # 读取对照表
     if init:  # 预热模式，调用数据处理方法
         data2, time, climate = data_processed(data, compound_name, arg1)
     else:  # 非预热模式，对数据的第T_行调用数据处理方法，表示第T_个小时的数据；注意入口处对main的循环！！！
@@ -42,9 +42,11 @@ def main(T_=0, init=False):
         head1 = ["Time", "RO2", "OH", "HO2", "HONO"]
         head2 = ["Time", "O3_G", "O3_D", "HO2+NO", "RO2+NO", "O3_photolysis", "O3+OH", "O3+HO2", "NO2+OH", "O3+olefin"]
         head3 = ["Time", "CO_10", "NOx_10", "VOCs_10", "olefin_10", "aromatics_10", "ovocs_10"]
-        head4 = ["Time", "SO2", "Aromatics", "Alkanes", "Alkenes", "NO2", "HNO3", "NO", "HO2NO2", "HONO", "HO2", "CO", "CH4", "OVOCs"]
-        head5 = ["Time", "NOx(-10%)", "NOx(-20%)", "NOx(-30%)", "NOx(-40%)", "VOCs(-10%)", "VOCs(-20%)", "VOCs(-30%)", "VOCs(-40%)"]
-        #head6 = ["Time", "VOCs_NOx_10", "VOCs_NOx_20", "VOCs_NOx_30"]  # 此是正常默认的设置
+        head4 = ["Time", "SO2", "Aromatics", "Alkanes", "Alkenes", "NO2", "HNO3", "NO", "HO2NO2", "HONO", "HO2", "CO",
+                 "CH4", "OVOCs"]
+        head5 = ["Time", "NOx(-10%)", "NOx(-20%)", "NOx(-30%)", "NOx(-40%)", "VOCs(-10%)", "VOCs(-20%)", "VOCs(-30%)",
+                 "VOCs(-40%)"]
+        # head6 = ["Time", "VOCs_NOx_10", "VOCs_NOx_20", "VOCs_NOx_30"]  # 此是正常默认的设置
         head6 = ["Time", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10", "b11", "b12"]  # 注意，此是为了专门跑程玉立的需求
         head7 = ["Time", "J_O1D", "J_HCHO_R", "J_HCHO_M", "J_NO2", "J_H2O2", "J_HONO", "J_NO3_b", "J_NO3_a"]
 
@@ -68,13 +70,13 @@ def main(T_=0, init=False):
 
 def check_file(file):
     if not exists(file):
-        log_write(log_file,f"{file} not exists! exit!\n")
+        log_write(log_file, f"{file} not exists! exit!\n")
         exit()
 
 
-def log_write(log_file,msg):
-    with open(log_file,"a+") as f:
-        f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S ")+msg)
+def log_write(log_file, msg):
+    with open(log_file, "a+") as f:
+        f.write(datetime.now().strftime("%Y-%m-%d %H:%M:%S ") + msg)
 
 
 def write_csv(path, data, model="w"):  # 写csv的函数
@@ -82,9 +84,9 @@ def write_csv(path, data, model="w"):  # 写csv的函数
         csv.writer(f).writerow(data)
 
 
-DATE = (datetime.now()+timedelta(days=-1)).strftime("%Y/%m/%d")  # 和EKMA模块线下版本一样的作用，用来表明存放结果的路径
+DATE = (datetime.now() + timedelta(days=-1)).strftime("%Y/%m/%d")  # 和EKMA模块线下版本一样的作用，用来表明存放结果的路径
 LONGITUDE, LATITUDE, ALTITUDE = 121.43, 28.68, 30
-P, T, H, kdil, bkgdconc, jcorr = -1, -1, -1, 1/86400, 1, 1
+P, T, H, kdil, bkgdconc, jcorr = -1, -1, -1, 1 / 86400, 1, 1
 
 main_path = "/Users/xingyuwang/Desktop/OBM_RIR"
 data_file = main_path + sep + "6月OBM输入数据.xlsx"  # 更新数据
@@ -129,5 +131,5 @@ if __name__ == "__main__":
     plot_photolysis.plot_photolysis(data_file7, save_path)  # 画光解速率图
 
     end_time = datetime.now()
-    cost_seconds = (end_time-start_time).seconds
+    cost_seconds = (end_time - start_time).seconds
     log_write(log_file2, f"Total cost time: {cost_seconds}s.\n")

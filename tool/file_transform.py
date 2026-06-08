@@ -6,7 +6,7 @@ from os.path import dirname, sep
 # 线上版本不调用该脚本。
 
 
-def file_transform(file:str):
+def file_transform(file: str):
     transform_data = read_csv(dirname(__file__) + sep + "name_to_cas.csv")  # 读取csv为DataFrame格式
     # 将DataFrame转化为字典格式，这里需要提出的是字典使用｜=方法在python3.8开始
     transform_dict = {transform_data.iloc[i, 1]: transform_data.iloc[i, 2] for i in range(transform_data.shape[0])}

@@ -16,7 +16,7 @@ import hashlib
 
 def macid():
     mac = uuid.UUID(int=uuid.getnode()).hex[-12:].upper()
-    mac = "@".join([mac[i:i+2] for i in range(0, 11, 2)])
+    mac = "@".join([mac[i:i + 2] for i in range(0, 11, 2)])
     return mac
 
 

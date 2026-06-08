@@ -8,28 +8,28 @@ from math import atan2, asin, atan
 
 
 def sun_position(time, location):
-    #This function compute the sun position (zenith and azimuth angle at the observer
-    #location) as a function of the observer local time and position.
+    # This function compute the sun position (zenith and azimuth angle at the observer
+    # location) as a function of the observer local time and position.
     #
-    #It is an implementation of the algorithm presented by Reda et Andreas in:
-    #Reda, I., Andreas, A. (2003) Solar position algorithm for solar
-    #radiation application. National Renewable Energy Laboratory (NREL)
-    #Technical report NREL/TP-560-34302
-    #This document is avalaible at www.osti.gov/bridge
+    # It is an implementation of the algorithm presented by Reda et Andreas in:
+    # Reda, I., Andreas, A. (2003) Solar position algorithm for solar
+    # radiation application. National Renewable Energy Laboratory (NREL)
+    # Technical report NREL/TP-560-34302
+    # This document is avalaible at www.osti.gov/bridge
     #
-    #This algorithm is based on numerical approximation of the exact equations
-    #The authors of the original paper state that this algorithm should be
-    #precise at +/- 0.0003 degrees. I have compared it to NOAA solar table
-    #(http://www.srrb.noaa.gov/highlights/sunrise/azel.html) and to USNO solar
-    #table (http://aa.usno.navy.mil/data/docs/AltAz.html) and found very good
-    #correspondance (up to the precision of those tables), except for large
-    #zenith angle, where the refraction by the atmosphere is significant
-    #(difference of about 1 degree). Note that in this code the correction
-    #for refraction in the atmosphere as been implemented for a temperature
-    #of 10C (283 kelvins) and a pressure of 1010 mbar. See the subfunction
-    #topocentric zenith angle calculation for a possible modification
-    #to explicitely model the effect of temperature and pressure as describe
-    #in Reda & Andreas (2003).
+    # This algorithm is based on numerical approximation of the exact equations
+    # The authors of the original paper state that this algorithm should be
+    # precise at +/- 0.0003 degrees. I have compared it to NOAA solar table
+    # (http://www.srrb.noaa.gov/highlights/sunrise/azel.html) and to USNO solar
+    # table (http://aa.usno.navy.mil/data/docs/AltAz.html) and found very good
+    # correspondance (up to the precision of those tables), except for large
+    # zenith angle, where the refraction by the atmosphere is significant
+    # (difference of about 1 degree). Note that in this code the correction
+    # for refraction in the atmosphere as been implemented for a temperature
+    # of 10C (283 kelvins) and a pressure of 1010 mbar. See the subfunction
+    # topocentric zenith angle calculation for a possible modification
+    # to explicitely model the effect of temperature and pressure as describe
+    # in Reda & Andreas (2003).
     # input:
     # time={'year':YEAR,'month':MONTH,'day':DAY,'hour':HOUR,'min':MIN',sec':SEC,'UTC':UTC}
     # location={'longitude':LONGITUDE,'latitude':LATITUDE,'altitude':ALTITUDE}
@@ -77,7 +77,7 @@ def sun_position(time, location):
         aberration_correction = abberation_correction_calculation(earth_heliocentric_position)
 
         apparent_sun_longitude = apparent_sun_longitude_calculation(sun_geocentric_position, nutation,
-                                                                aberration_correction)
+                                                                    aberration_correction)
 
         apparent_stime_at_greenwich = apparent_stime_at_greenwich_calculation(julian, nutation, true_obliquity)
 
@@ -90,8 +90,9 @@ def sun_position(time, location):
         observer_local_hour = observer_local_hour_calculation(apparent_stime_at_greenwich, location2,
                                                               sun_right_ascension)
 
-        topocentric_sun_position=topocentric_sun_position_calculate(earth_heliocentric_position, location2,
-                                                observer_local_hour, sun_right_ascension, sun_geocentric_declination)
+        topocentric_sun_position = topocentric_sun_position_calculate(earth_heliocentric_position, location2,
+                                                                      observer_local_hour, sun_right_ascension,
+                                                                      sun_geocentric_declination)
 
         topocentric_local_hour = topocentric_local_hour_calculate(observer_local_hour, topocentric_sun_position)
 
@@ -250,7 +251,7 @@ def earth_heliocentric_position_calculation(julian):
     L5 = np.sum(A5 * np.cos(B5 + (C5 * JME)))
 
     tem = 180 / np.pi * 1e-8 * (L0 + L1 * JME + L2 * JME ** 2 + L3 * JME ** 3 + L4 * JME ** 4 + L5 * JME ** 5)
-    earth_heliocentric_position={"longitude":set_to_range(tem,0,360)}
+    earth_heliocentric_position = {"longitude": set_to_range(tem, 0, 360)}
 
     B0_terms = np.array([
         [280.0, 3.199, 84334.662], [102.0, 5.422, 5507.553], [80, 3.88, 5223.69],
@@ -272,7 +273,7 @@ def earth_heliocentric_position_calculation(julian):
     L1 = np.sum(A1 * np.cos(B1 + C1 * JME))
 
     tem = 180 / np.pi * (L0 + L1 * JME) / 1e8
-    earth_heliocentric_position.update({"latitude":set_to_range(tem,0,360)})
+    earth_heliocentric_position.update({"latitude": set_to_range(tem, 0, 360)})
 
     R0_terms = np.array([
         [100013989.0, 0, 0], [1670700.0, 3.0984635, 6283.07585], [13956.0, 3.05525, 12566.1517],
@@ -333,17 +334,17 @@ def earth_heliocentric_position_calculation(julian):
     L3 = np.sum(A3 * np.cos(B3 + (C3 * JME)))
     L4 = np.sum(A4 * np.cos(B4 + (C4 * JME)))
 
-    earth_heliocentric_position.update({"radius":(L0 + (L1 * JME) + (L2 * JME ** 2) + (L3 * JME ** 3) + (
-                L4 * JME ** 4)) / 1e8})
+    earth_heliocentric_position.update({"radius": (L0 + (L1 * JME) + (L2 * JME ** 2) + (L3 * JME ** 3) + (
+            L4 * JME ** 4)) / 1e8})
 
     return earth_heliocentric_position
 
 
 def sun_geocentric_position_calculation(earth_heliocentric_position):
     tem = earth_heliocentric_position['longitude'] + 180
-    sun_geocentric_position={'longitude':set_to_range(tem, 0, 360)}
+    sun_geocentric_position = {'longitude': set_to_range(tem, 0, 360)}
     tem = -earth_heliocentric_position['latitude']
-    sun_geocentric_position.update({'latitude':set_to_range(tem, 0, 360)})
+    sun_geocentric_position.update({'latitude': set_to_range(tem, 0, 360)})
 
     return sun_geocentric_position
 
@@ -408,11 +409,13 @@ def nutation_calculation(julian):
     Xi = np.array([[X0], [X1], [X2], [X3], [X4]])
 
     tabulated_argument = (Y_terms @ Xi) * np.pi / 180
-    delta_longitude = ((nutation_terms[:, 0] + (nutation_terms[:, 1] * JCE))) * np.sin(tabulated_argument).reshape(1, -1)
-    delta_obliquity = ((nutation_terms[:, 2] + (nutation_terms[:, 3] * JCE))) * np.cos(tabulated_argument).reshape(1, -1)
+    delta_longitude = ((nutation_terms[:, 0] + (nutation_terms[:, 1] * JCE))) * np.sin(tabulated_argument).reshape(1,
+                                                                                                                   -1)
+    delta_obliquity = ((nutation_terms[:, 2] + (nutation_terms[:, 3] * JCE))) * np.cos(tabulated_argument).reshape(1,
+                                                                                                                   -1)
 
-    nutation={'longitude': np.sum(delta_longitude) / 36000000}
-    nutation.update({'obliquity':np.sum(delta_obliquity) / 36000000})
+    nutation = {'longitude': np.sum(delta_longitude) / 36000000}
+    nutation.update({'obliquity': np.sum(delta_obliquity) / 36000000})
 
     return nutation
 
@@ -497,9 +500,10 @@ def topocentric_sun_position_calculate(earth_heliocentric_position, location2, o
         eq_horizontal_parallax * np.pi / 180) * np.cos(observer_local_hour * np.pi / 180)
     sun_rigth_ascension_parallax = atan2(nominator, denominator)
 
-    topocentric_sun_position={'rigth_ascension_parallax':sun_rigth_ascension_parallax * 180 / np.pi}
+    topocentric_sun_position = {'rigth_ascension_parallax': sun_rigth_ascension_parallax * 180 / np.pi}
 
-    topocentric_sun_position.update({'rigth_ascension':sun_rigth_ascension + sun_rigth_ascension_parallax * 180 / np.pi})
+    topocentric_sun_position.update(
+        {'rigth_ascension': sun_rigth_ascension + sun_rigth_ascension_parallax * 180 / np.pi})
 
     nominator = (np.sin(sun_geocentric_declination * np.pi / 180) - y * np.sin(
         eq_horizontal_parallax * np.pi / 180)) * np.cos(sun_rigth_ascension_parallax)
@@ -529,7 +533,7 @@ def sun_topocentric_zenith_angle_calculate(location2, topocentric_sun_position, 
 
     apparent_elevation = true_elevation + refraction_corr if true_elevation > -5 else true_elevation
 
-    sun={'zenith':90 - apparent_elevation}
+    sun = {'zenith': 90 - apparent_elevation}
 
     nominator = np.sin(topocentric_local_hour * np.pi / 180)
     denominator = np.cos(topocentric_local_hour * np.pi / 180) * np.sin(location2['latitude'] * np.pi / 180) - \
@@ -537,7 +541,7 @@ def sun_topocentric_zenith_angle_calculate(location2, topocentric_sun_position, 
         location2['latitude'] * np.pi / 180)
 
     tem = atan2(nominator, denominator) * 180 / np.pi + 180
-    sun.update({'azimuth':set_to_range(tem, 0, 360)})
+    sun.update({'azimuth': set_to_range(tem, 0, 360)})
 
     return sun
 

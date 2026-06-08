@@ -1,5 +1,6 @@
 from pandas import to_numeric
 from warnings import simplefilter
+
 simplefilter("ignore")
 
 
@@ -16,7 +17,7 @@ def do_mean(data):
     data["special"] = data.iloc[:, 0].apply(lambda x: x[11: 13])  # 生成新的special列，每列包含了表示日期的中的小时
     temp = data.drop("index", axis=1)  # 删除index列
     data2 = temp.groupby("special").mean()  # 按照小时进行分组，之后不同组对应位置平均
-    loc = int(data.iloc[:, 1:].shape[0]/2)  # 获取data中对于中间位置的时间
+    loc = int(data.iloc[:, 1:].shape[0] / 2)  # 获取data中对于中间位置的时间
     data2.index = data.iloc[loc, 0][:10] + " " + data2.index + ":00"  # 将改时间赋予给data2
 
     return data2

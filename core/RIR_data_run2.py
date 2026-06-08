@@ -8,7 +8,6 @@ from os import sep
 from core.P_O3subNO import P_O3subNO
 from pandas import DataFrame
 
-
 # 此为RIR模块的的运算模块，用于预热模式，更新模式，情景削减模式
 # initialize用于预热，update用于更新模式，initialize_update用于情景削减模式
 
@@ -23,7 +22,8 @@ def columns(data, iHold):
 def initialize(data, time, climate, location, arg, save_path, iHold=0):
     kdil, bkgdconc, jcorr, O3col, albedo, LinkSteps, FixNOx = arg
     HOUR, MIN, SEC, UTC = data.index.to_list(), 0, 0, 8
-    time = {"year": time["Y"], "month": time["M"], "day": time["D"], "hour": time["H"], "min": MIN, "sec": SEC, "UTC": UTC}
+    time = {"year": time["Y"], "month": time["M"], "day": time["D"], "hour": time["H"], "min": MIN, "sec": SEC,
+            "UTC": UTC}
     sun = sun_position(time, deepcopy(location))
     Met = {"P": climate["P"], "T": [i + 273.15 for i in climate["T"]], "RH": climate["H"], "SZA": sun["zenith"],
            "kdil": kdil, "jcorr": jcorr, "ALT": location["altitude"], "O3col": O3col, "albedo": albedo}
@@ -37,7 +37,7 @@ def initialize(data, time, climate, location, arg, save_path, iHold=0):
     args = F0AM_ModelCore_read(Met, ChemFiles)
     args2 = (data, BkgdConc, ModelOptions, kdil, *args)
     result = F0AM_ModelCore_calculate(args2)
-    Conc = {i: [j[-1]]*36 for i, j in result["Conc"].items()}  # 36和下面update的情景个数对应
+    Conc = {i: [j[-1]] * 36 for i, j in result["Conc"].items()}  # 36和下面update的情景个数对应
     with open(save_path + sep + "result.json", "wb") as f:
         f.write(dumps(Conc).encode("utf-8"))
         f.close()
@@ -60,7 +60,8 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     else:
         pool = Pool(1)
     HOUR, MIN, SEC, UTC = data.index.to_list(), 0, 0, 8
-    time = {"year": time["Y"], "month": time["M"], "day": time["D"], "hour": time["H"], "min": MIN, "sec": SEC, "UTC": UTC}
+    time = {"year": time["Y"], "month": time["M"], "day": time["D"], "hour": time["H"], "min": MIN, "sec": SEC,
+            "UTC": UTC}
     sun = sun_position(time, deepcopy(location))
     Met = {"P": climate["P"], "T": [i + 273.15 for i in climate["T"]], "RH": climate["H"], "SZA": sun["zenith"],
            "kdil": kdil, "jcorr": jcorr, "ALT": location["altitude"], "O3col": O3col, "albedo": albedo}
@@ -84,38 +85,38 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
-    data_ = deepcopy(data)#RIR_CO
+    data_ = deepcopy(data)  # RIR_CO
     data_["CO"] *= 0.9
     data_[temp] = result[temp].loc[j]
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
-    data_ = deepcopy(data)#RIR_NOx
+    data_ = deepcopy(data)  # RIR_NOx
     data_[["NO", "NO2"]] *= 0.9
     data_[temp] = result[temp].loc[j]
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
-    data_ = deepcopy(data)#RIR_VOCs
+    data_ = deepcopy(data)  # RIR_VOCs
     data_[vocs] *= 0.9
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.9
+    # data_["O3"] *= 0.9
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
-    data_ = deepcopy(data)#RIR_OLEFIN
+    data_ = deepcopy(data)  # RIR_OLEFIN
     data_[olefin] *= 0.9
     data_[temp] = result[temp].loc[j]
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
-    data_ = deepcopy(data)#RIR_AROMATICS
+    data_ = deepcopy(data)  # RIR_AROMATICS
     data_[aromatics] *= 0.9
     data_[temp] = result[temp].loc[j]
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
-    data_ = deepcopy(data)#RIR_OVOCS
+    data_ = deepcopy(data)  # RIR_OVOCS
     data_[ovocs] *= 0.9
     data_[temp] = result[temp].loc[j]
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
@@ -160,34 +161,34 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     data_ = deepcopy(data)  # VOCs_NOx_10
     data_[voc_nox] *= 0.9
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.9
+    # data_["O3"] *= 0.9
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
     data_ = deepcopy(data)  # VOCs_NOx_20
     data_[voc_nox] *= 0.8
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.8
+    # data_["O3"] *= 0.8
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
     data_ = deepcopy(data)  # VOCs_NOx_30
     data_[voc_nox] *= 0.7
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.7
+    # data_["O3"] *= 0.7
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
 
     data_ = deepcopy(data)
     data_[voc_nox] *= 0.6
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.6
+    # data_["O3"] *= 0.6
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
 
     data_ = deepcopy(data)
     data_[vocs] *= 0.95
     data_[["NO2", "NO"]] *= 0.9
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.92
+    # data_["O3"] *= 0.92
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
@@ -195,7 +196,7 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     data_[vocs] *= 0.9
     data_[["NO2", "NO"]] *= 0.8
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.85
+    # data_["O3"] *= 0.85
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
@@ -203,7 +204,7 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     data_[vocs] *= 0.85
     data_[["NO2", "NO"]] *= 0.7
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.78
+    # data_["O3"] *= 0.78
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
@@ -211,7 +212,7 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     data_[vocs] *= 0.8
     data_[["NO2", "NO"]] *= 0.6
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.7
+    # data_["O3"] *= 0.7
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
@@ -219,7 +220,7 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     data_[vocs] *= 0.9
     data_[["NO2", "NO"]] *= 0.95
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.92
+    # data_["O3"] *= 0.92
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
@@ -227,7 +228,7 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     data_[vocs] *= 0.8
     data_[["NO2", "NO"]] *= 0.9
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.95
+    # data_["O3"] *= 0.95
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
@@ -235,7 +236,7 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     data_[vocs] *= 0.7
     data_[["NO2", "NO"]] *= 0.85
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.9
+    # data_["O3"] *= 0.9
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
@@ -243,7 +244,7 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     data_[vocs] *= 0.6
     data_[["NO2", "NO"]] *= 0.8
     data_[temp] = result[temp].loc[j]
-    #data_["O3"] *= 0.7
+    # data_["O3"] *= 0.7
     re.append(pool.apply_async(func=F0AM_ModelCore_calculate, args=((data_, BkgdConc, ModelOptions, kdil, *args),)))
     j += 1
 
@@ -255,7 +256,7 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     O3_NOx_G, O3_NOx_D, _ = P_O3subNO(re[2].get())
     O3_VOCs_G, O3_VOCs_D, _ = P_O3subNO(re[3].get())
     O3_olefin_G, O3_olefin_D, _ = P_O3subNO(re[4].get())
-    #O3_alkyne_G, O3_alkyne_D, _ = P_O3subNO(re[5].get())
+    # O3_alkyne_G, O3_alkyne_D, _ = P_O3subNO(re[5].get())
     O3_aromatics_G, O3_aromatics_D, _ = P_O3subNO(re[5].get())
     O3_ovocs_G, O3_ovocs_D, _ = P_O3subNO(re[6].get())
     P_O3 = O3_G - O3_D
@@ -272,9 +273,9 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     O3_VOCs_20 = float(re[8].get()["Conc"]["O3"])
     O3_NOx_30 = float(re[9].get()["Conc"]["O3"])
     O3_VOCs_30 = float(re[10].get()["Conc"]["O3"])
-    #O3_NOxVOCs_10 = float(re[11].get()["Conc"]["O3"])
-    #O3_NOxVOCs_20 = float(re[12].get()["Conc"]["O3"])
-    #O3_NOxVOCs_30 = float(re[13].get()["Conc"]["O3"])
+    # O3_NOxVOCs_10 = float(re[11].get()["Conc"]["O3"])
+    # O3_NOxVOCs_20 = float(re[12].get()["Conc"]["O3"])
+    # O3_NOxVOCs_30 = float(re[13].get()["Conc"]["O3"])
 
     O3_NOx_40 = float(re[11].get()["Conc"]["O3"])
     O3_VOCs_40 = float(re[12].get()["Conc"]["O3"])
@@ -293,7 +294,8 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     b12 = float(re[24].get()["Conc"]["O3"])
 
     M = float(re[0].get()["Met"]["M"]) * 1e-9
-    RO2 = float((re[0].get()["Conc"]["XO2"] + re[0].get()["Conc"]["XO2N"] + re[0].get()["Conc"]["MEO2"] + re[0].get()["Conc"]["TO2"])) * M
+    RO2 = float((re[0].get()["Conc"]["XO2"] + re[0].get()["Conc"]["XO2N"] + re[0].get()["Conc"]["MEO2"] +
+                 re[0].get()["Conc"]["TO2"])) * M
     OH = float(re[0].get()["Conc"]["OH"]) * M
     HO2 = float(re[0].get()["Conc"]["HO2"]) * M
     HONO = float(re[0].get()["Conc"]["HONO"]) * M
@@ -317,8 +319,9 @@ def update(data, time, climate, location, arg, save_path, iHold=0, multi_process
     R2 = [T] + [round(i, 5) for i in [O3_G, O3_D]] + [round(i, 5) for i in list(component)]
     R3 = [T] + [round(i, 5) for i in [a1, a2, a3, a4, a5, a6]]
     R4 = [T] + [round(i, 5) for i in list(R_special)]
-    R5 = [T] + [round(i, 5) for i in [O3_NOx_10, O3_NOx_20, O3_NOx_30, O3_NOx_40, O3_VOCs_10, O3_VOCs_20, O3_VOCs_30, O3_VOCs_40]]
-    #R6 = [T] + [round(i, 5) for i in [O3_NOxVOCs_10, O3_NOxVOCs_20, O3_NOxVOCs_30]]
+    R5 = [T] + [round(i, 5) for i in
+                [O3_NOx_10, O3_NOx_20, O3_NOx_30, O3_NOx_40, O3_VOCs_10, O3_VOCs_20, O3_VOCs_30, O3_VOCs_40]]
+    # R6 = [T] + [round(i, 5) for i in [O3_NOxVOCs_10, O3_NOxVOCs_20, O3_NOxVOCs_30]]
     R6 = [T] + [round(i, 5) for i in [b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12]]
     R7 = [T] + [round(i, 8) for i in J]
 
@@ -359,11 +362,11 @@ def initialize_update(data_list, arg2, location, iHold=0, vocs_cut=-1, nox_cut=-
     result_list = [{i: j[-1] for i, j in item.get()["Conc"].items()} for item in re]
     O3 = []
     for hour in range(24):
-        pool = Pool(CPU-1)
+        pool = Pool(CPU - 1)
         data_hour = [data_[0].iloc[[hour]] for data_ in data_list]
         T_list, re = [], []
         for day in range(1, CPU):  # 计算所有🤔的24小时更新情况
-            result, data = result_list[day-1], data_hour[day-1]
+            result, data = result_list[day - 1], data_hour[day - 1]
             _, time, climate = data_list[day]
             time = {"year": time["Y"], "month": time["M"], "day": time["D"], "hour": time["H"][hour], "min": MIN,
                     "sec": SEC, "UTC": UTC}
@@ -414,6 +417,6 @@ def initialize_update(data_list, arg2, location, iHold=0, vocs_cut=-1, nox_cut=-
         O3.append([{"dateTime": t, "value": o3} for t, o3 in zip(T_list, temp)])
 
     O3 = list(map(list, zip(*O3)))
-    return_result = {str(day): O3[day] for day in range(CPU-1)}
+    return_result = {str(day): O3[day] for day in range(CPU - 1)}
 
     return return_result

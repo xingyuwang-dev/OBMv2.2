@@ -1,22 +1,22 @@
-from numpy import exp, log10, array, power #normally, it is faster than **
+from numpy import exp, log10, array, power  # normally, it is faster than **
 
 
-#function K=CB05_K(met)
-#Calculate generic rate constants for use with the CB05 chemical mechainsm.
+# function K=CB05_K(met)
+# Calculate generic rate constants for use with the CB05 chemical mechainsm.
 #
-#INPUTS:
-#Met: structure containing the following fields:
-#T: temperature, K
-#M: number density, molec/cm^3
+# INPUTS:
+# Met: structure containing the following fields:
+# T: temperature, K
+# M: number density, molec/cm^3
 #
-#OUTPUTS:
-#K: structure of rate constants. Each is size length(T) x # of rate constants
+# OUTPUTS:
+# K: structure of rate constants. Each is size length(T) x # of rate constants
 #
-#20130106 GWM
-#20130317 MM Triple-checked for consistency with CB05 documentation.
-#20160304 GWM Changed output from name/value pair to structure, input to structure
-#20160516 MM Corrected error in exponents for all termolecular reactions (-2 vs 2).
-#This was an error in the original documentation.
+# 20130106 GWM
+# 20130317 MM Triple-checked for consistency with CB05 documentation.
+# 20160304 GWM Changed output from name/value pair to structure, input to structure
+# 20160516 MM Corrected error in exponents for all termolecular reactions (-2 vs 2).
+# This was an error in the original documentation.
 
 
 # 该脚本用于计算K值，K值表示特定反应的反应速率，下面每个函数都经过严格的计算与对照，不需要进行任何修改！！！
@@ -41,7 +41,7 @@ def K_OH_NO(T, M):
     LPL = 7.00e-31 * power(T / 300, -2.6) * M
     HPL = 3.60e-11 * power(T / 300, -0.1)
     krx = (LPL / (1 + LPL / HPL)) * power(0.6, 1 / (1 + power(log10(LPL / HPL), 2)))
-    return  krx
+    return krx
 
 
 def K_OH_NO2(T, M):
@@ -154,6 +154,7 @@ def K_PANX(T, M):
     krx = (LPL / (1 + LPL / HPL)) * power(0.3, 1 / (1 + power(log10(LPL / HPL), 2)))
     return krx
 
+
 def CB05_K(Met: dict):
     # input:
     # Met={'T':,'M':,'H2O':}
@@ -168,7 +169,7 @@ def CB05_K(Met: dict):
         raise ValueError('MCMv331_K: InvalidInput, Check your Met data.')
 
     Knames = ["K_O3P_NO2", "K_O3P_NO", "K_OH_NO", "K_OH_NO2", "K_OH_HNO3", "K_OH_OLE",
-              "K_OH_ETH", "K_SO2_OH","K_OH_OH", "K_OH_CO", "K_NO3_NO2", "K_N2O5",
+              "K_OH_ETH", "K_SO2_OH", "K_OH_OH", "K_OH_CO", "K_NO3_NO2", "K_N2O5",
               "K_HO2_NO2", "K_PNA", "K_C2O3_NO2", "K_PAN", "K_CXO3_NO2", "K_PANX"]
     Kvalues = array([K_O3P_NO2(T, M), K_O3P_NO(T, M), K_OH_NO(T, M), K_OH_NO2(T, M), K_OH_HNO3(T, M), K_OH_OLE(T, M),
                      K_OH_ETH(T, M), K_SO2_OH(T, M), K_OH_OH(T, M), K_OH_CO(T, M), K_NO3_NO2(T, M), K_N2O5(T, M),

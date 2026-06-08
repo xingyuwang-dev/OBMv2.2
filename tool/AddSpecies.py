@@ -1,7 +1,7 @@
 # 该脚本根据原有m文件改写，主要作用是添加新的物种名称到Cnames中，添加新的RO2名称到RO2names中
 
 
-#Add species to Cnames and RO2name
+# Add species to Cnames and RO2name
 
 
 def AddSpecies(SpeciesToAdd: list, Cnames=None, RO2names=None, *RO2ToAdd):
@@ -22,11 +22,11 @@ def AddSpecies(SpeciesToAdd: list, Cnames=None, RO2names=None, *RO2ToAdd):
         RO2names = []
 
     Cnames.extend([SpNow for SpNow in SpeciesToAdd if SpNow not in Cnames])
-    #fstr=fstr.extend([f"{i}" for i in Cnames])
-    #len_of_sparse=len(Cnames)
+    # fstr=fstr.extend([f"{i}" for i in Cnames])
+    # len_of_sparse=len(Cnames)
 
     if len(RO2ToAdd) != 0:
         RO2ToAdd = RO2ToAdd[0]
-        RO2names +=[SpNow for SpNow in RO2ToAdd if SpNow not in RO2names]
+        RO2names += [SpNow for SpNow in RO2ToAdd if SpNow not in RO2names]
 
     return Cnames, RO2names

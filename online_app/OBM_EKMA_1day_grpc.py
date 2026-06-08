@@ -12,7 +12,6 @@ from tool.data_average import do_mean, calculate_noxvoc
 from CB05.CB05_transfrom import transfrom
 from scipy.interpolate import interp1d, interp2d
 
-
 # 此是线上运行的OBM模型，其中数据处理，模型设置部分封装成了类；这样做的主要原因是为了规避多线程计算中会出现的变量共享
 # 的问题。当后端传入多个站点数据时，每个站点的数据与设置需要最大程度的隔绝。将通用的数据处理与模型设置封装为类，实例属性
 # 与实例方法时，可以有效达到此效果。此不是线上模型入口，OBM_grpc.py才是模型的入口和出口；相对于OBM_EKMA_1day.py不会重复注释
@@ -42,8 +41,10 @@ class Do_simulation:
             raise KeyError("Check your data!")
         try:
             self.climate = [float(rec_str["p"]), float(rec_str["t"]), float(rec_str["h"])]  # 初始化气压，温度，湿度
-            self.control = [float(rec_str["kdil"]), float(rec_str["bkgdconc"]), float(rec_str["jcorr"]),  # 稀释速率，背景浓度系数，光解速率校正系数
-                            float(rec_str["o3col"]), float(rec_str["albedo"]), float(rec_str["linksteps"]),  # 臭氧总量，反射率，迭代控制参数
+            self.control = [float(rec_str["kdil"]), float(rec_str["bkgdconc"]), float(rec_str["jcorr"]),
+                            # 稀释速率，背景浓度系数，光解速率校正系数
+                            float(rec_str["o3col"]), float(rec_str["albedo"]), float(rec_str["linksteps"]),
+                            # 臭氧总量，反射率，迭代控制参数
                             float(rec_str["fixnox"])]  # NOx校正系数
             self.location = {"latitude": float(rec_str["latitude"]), "longitude": float(rec_str["longitude"]),  # 经纬度，海拔
                              "altitude": float(rec_str["altitude"])}
@@ -93,7 +94,8 @@ class Do_simulation:
         M, N = self.data.shape
         # extra rule
         for i in self.data.columns:
-            if i not in Do_simulation.threshold.keys() and i not in {"NO", "NO2", "O3", "CO", "T", "P", "H", "PAR", "NR"}:
+            if i not in Do_simulation.threshold.keys() and i not in {"NO", "NO2", "O3", "CO", "T", "P", "H", "PAR",
+                                                                     "NR"}:
                 self.data.loc[self.data[i] > 30, i] = 30
             elif i in Do_simulation.threshold.keys():
                 self.data.loc[self.data[i] > Do_simulation.threshold[i], i] = Do_simulation.threshold[i]
@@ -110,16 +112,18 @@ class Do_simulation:
             TEMPERATURE = [(i + j) / 2 for i, j in zip(Do_simulation.tem_summer, Do_simulation.tem_winter)]
             HUMIDITY = [(i + j) / 2 for i, j in zip(Do_simulation.hum_summer, Do_simulation.hum_winter)]
         if "T" in self.data.columns:  # 如果监测数据data中有T，且输入T为-1，则用监测数据。如果输入T不为-1，用输入T代表温度
-            TEMPERATURE = self.data["T"].tolist() if self.climate[1] == -1 else [self.climate[1]]*M
+            TEMPERATURE = self.data["T"].tolist() if self.climate[1] == -1 else [self.climate[1]] * M
         if "P" in self.data.columns:
-            PRESSURE = (self.data["P"]*10).tolist() if self.climate[0] == -1 else [self.climate[0]]*M
+            PRESSURE = (self.data["P"] * 10).tolist() if self.climate[0] == -1 else [self.climate[0]] * M
         if "H" in self.data.columns:
-            HUMIDITY = self.data["H"].tolist() if self.climate[2] == -1 else [self.climate[2]]*M
+            HUMIDITY = self.data["H"].tolist() if self.climate[2] == -1 else [self.climate[2]] * M
 
         # CB05 model
         columns_set = set(self.data.columns)
-        voc_name = columns_set - {"T", "P", "H", "O3", "SO2", "CO", "NO", "NO2", "PAR", "OLE", "TOL", "XYL", "FORM", "ALD2",
-                              "ETH", "ISOP", "MEOH", "ETOH", "NR", "ETHA", "IOLE", "ALDX", "TERP", "MGLY", "ISPD", "AACD"}
+        voc_name = columns_set - {"T", "P", "H", "O3", "SO2", "CO", "NO", "NO2", "PAR", "OLE", "TOL", "XYL", "FORM",
+                                  "ALD2",
+                                  "ETH", "ISOP", "MEOH", "ETOH", "NR", "ETHA", "IOLE", "ALDX", "TERP", "MGLY", "ISPD",
+                                  "AACD"}
         """
         iole = {"CPENT2ENE", "TBUT2ENE", "CBUT2ENE", "TPENT2ENE"} & columns_set
         ole = {"PENT1ENE", "C3H6", "HEX1ENE", "C4H6", "STYRENE", "C5H8", "BUT1ENE"} & columns_set
@@ -145,14 +149,16 @@ class Do_simulation:
         """
         # preparation for model
         HOUR, MIN, SEC, UTC = self.data.index.to_list(), 0, 0, 8
-        time = {"year": self.YEAR, "month": self.MONTH, "day": self.DAY, "hour": HOUR, "min": MIN, "sec": SEC, "UTC": UTC}
+        time = {"year": self.YEAR, "month": self.MONTH, "day": self.DAY, "hour": HOUR, "min": MIN, "sec": SEC,
+                "UTC": UTC}
         sun = sun_position(time, self.location)
-        Met = {"P": PRESSURE, "T": [i+273.15 for i in TEMPERATURE], "RH": HUMIDITY, "SZA": sun["zenith"], "kdil":
-               self.control[0], "jcorr": self.control[2], "ALT": self.location["altitude"], "O3col": self.control[3],
+        Met = {"P": PRESSURE, "T": [i + 273.15 for i in TEMPERATURE], "RH": HUMIDITY, "SZA": sun["zenith"], "kdil":
+            self.control[0], "jcorr": self.control[2], "ALT": self.location["altitude"], "O3col": self.control[3],
                "albedo": self.control[4]}
         J = {i for i in columns_set if i[0] == "J"}
         Met.update({i: self.data[i].tolist() for i in J})
-        ChemFiles = ("CB05_K(Met)", "CB05_J(Met,2)", "CB05_AllRxns")  # ("MCMv331_K(Met)","MCMv331_J(Met,0)","mcm_subset2")
+        ChemFiles = ("CB05_K(Met)", "CB05_J(Met,2)",
+                     "CB05_AllRxns")  # ("MCMv331_K(Met)","MCMv331_J(Met,0)","mcm_subset2")
         BkgdConc = {"DEFAULT": self.control[1]}
         ModelOptions = {"Verbose": 0, "EndPointsOnly": 1, "LinkSteps": self.control[5], "Repeat": 1, "IntTime": 3600,
                         "SavePath": "DoNotSave", "FixNOx": self.control[6], "TimeStamp": HOUR}
@@ -169,7 +175,7 @@ class Do_simulation:
         result.update({"ioa": str(ioa)})  # 添加相符指数IOA
         result.update({"y_value": str(y_value), "x_value": str(x_value)})  # 添加点的横纵坐标
         result.update({"y": self.voc_nox_mean[0], "x": self.voc_nox_mean[1]})  # 添加散点的横纵坐标
-        a, b = gradient2(x_value*array(self.J_ARRAY), y_value*array(self.I_ARRAY),O3_Max)  # 求脊线的a，b值，y=ax+b
+        a, b = gradient2(x_value * array(self.J_ARRAY), y_value * array(self.I_ARRAY), O3_Max)  # 求脊线的a，b值，y=ax+b
         result.update({"a": round(a, 2), "b": round(b, 2)})  # 添加a，b值进入result
 
         return result
@@ -183,8 +189,9 @@ def check_file(file):
 
 def log_write(log_file, msg):
     with open(log_file, "ab", buffering=0) as f:
-        f.write((datetime.now().strftime("%Y-%m-%d %H:%M:%S ")+msg).encode("utf-8"))
+        f.write((datetime.now().strftime("%Y-%m-%d %H:%M:%S ") + msg).encode("utf-8"))
         f.close()
+
 
 """
 def error_decoration(func):
@@ -222,7 +229,7 @@ def gradient2(x, y, data, times=1000, eta=1e-1):  # BGD  # 参考Tool/plot_EKMA.
         x_ = x_2 - eta * (fit_x(x_2, y_2))
         y_ = y_2 - eta * (fit_y(x_2, y_2))
         re_x.append(float(x_))
-        re_y.append(float(y_)+5)
+        re_y.append(float(y_) + 5)
 
     re = polyfit(re_x, re_y, deg=1)
 
@@ -230,7 +237,6 @@ def gradient2(x, y, data, times=1000, eta=1e-1):  # BGD  # 参考Tool/plot_EKMA.
 
 
 def start_simulation(receive_string: str):
-
     # check_file(compound_name_file)
 
     start_time = datetime.now()
@@ -240,6 +246,7 @@ def start_simulation(receive_string: str):
     simulation.do_process()  # 调用该情景的do_process方法，处理该实例本身的数据
     re = simulation.do_simulation()  # 调用该情景的do_simulation方法，模拟该情景
 
-    log_write(log_file, f"EKMA ending, Total cost time: {(datetime.now()-start_time).seconds}s @(｡･o･)@ @(｡･o･)@ @(｡･o･)@.\n")
+    log_write(log_file,
+              f"EKMA ending, Total cost time: {(datetime.now() - start_time).seconds}s @(｡･o･)@ @(｡･o･)@ @(｡･o･)@.\n")
 
     return re

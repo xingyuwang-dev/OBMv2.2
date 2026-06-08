@@ -5,21 +5,21 @@ from scipy.interpolate import RegularGridInterpolator  # 常规栅格插值器�
 from numpy import arange, load, hstack  # arang：生成一个数组，load：加载.npz文件，hstack：水平拼接数组
 
 
-#function J=J_Hybrid(SZA,ALT,O3col,albedo)
-#Interpolation hybrid J-values to desired SZA, altitude, O3column and albedo.
-#The J-values found in Jhybrid.mat were derived using a combination of TUV solar spectra
-#and custom-compiled quantum yields (QY) ad cross sections (CS).
+# function J=J_Hybrid(SZA,ALT,O3col,albedo)
+# Interpolation hybrid J-values to desired SZA, altitude, O3column and albedo.
+# The J-values found in Jhybrid.mat were derived using a combination of TUV solar spectra
+# and custom-compiled quantum yields (QY) ad cross sections (CS).
 #
-#Clear-sky TUVv5.2 solar spectra were calculated with the following inputs:
-#SZA 0:5:90 degrees
-#Altitudes 0:1:15 km
-#O3 column 100:50:600 DU
-#ground Alt 0 km
-#AOD 0.235
-#For more detailed info on TUV setup, see TUV ActinicFlux.m and TUV_WriteInputFile_ActinicFlux.m.
+# Clear-sky TUVv5.2 solar spectra were calculated with the following inputs:
+# SZA 0:5:90 degrees
+# Altitudes 0:1:15 km
+# O3 column 100:50:600 DU
+# ground Alt 0 km
+# AOD 0.235
+# For more detailed info on TUV setup, see TUV ActinicFlux.m and TUV_WriteInputFile_ActinicFlux.m.
 #
-#QY and CS information was taken from IUPAC and/or JPL recommendations as documented in
-#PhotoDataSources.xlsx. For more info the calculation, see J_BottomUp.m
+# QY and CS information was taken from IUPAC and/or JPL recommendations as documented in
+# PhotoDataSources.xlsx. For more info the calculation, see J_BottomUp.m
 
 
 # 该脚本会被CB05模块与MCMv331模块下的计算光解速率的部分调用，J_Hybrid与J_Hybrid_new函数接受4个参数，返回一个字典
@@ -34,29 +34,29 @@ from numpy import arange, load, hstack  # arang：生成一个数组，load：�
 
 
 def J_Hybrid(SZA, ALT, O3col, albedo):
-    #try:
+    # try:
     #    SZA = array(SZA)
     #    ALT = array(ALT)
     #    O3col = array(O3col)
     #    albedo = array(albedo)
-    #except:
+    # except:
     #    raise ValueError("J_Hybrid: Invalid Met, cannot transform to ndarray")
 
-    J_name = ["J1","J2","J3","J4","J5","J6","J7","J8","J11","J12",
-              "J13","J14","J15","J16","J17","J18","J19","J20","J21","J22",
-              "J23","J24","J31","J32","J33","J34","J35","J41","J51","J52",
-              "J53","J54","J55","J56","J57","Jn1","Jn2","Jn3","Jn4","Jn5",
-              "Jn6","Jn8","Jn9","Jn10","Jn11","Jn12","Jn13","Jn14","Jn15","Jn16",
-              "Jn17","Jn18","Jn19","Jn20","Jn21","Jn22","Jn23","Jn24","Jn25","Jn26",
-              "Jn27","Jn28","Jn29","Jn30","Jn31","Jn32","Jn33","Jn34","Jn35","Jn36"]
-    SZA[SZA > 90] = 90 # SZA.shape -> (x,1)
+    J_name = ["J1", "J2", "J3", "J4", "J5", "J6", "J7", "J8", "J11", "J12",
+              "J13", "J14", "J15", "J16", "J17", "J18", "J19", "J20", "J21", "J22",
+              "J23", "J24", "J31", "J32", "J33", "J34", "J35", "J41", "J51", "J52",
+              "J53", "J54", "J55", "J56", "J57", "Jn1", "Jn2", "Jn3", "Jn4", "Jn5",
+              "Jn6", "Jn8", "Jn9", "Jn10", "Jn11", "Jn12", "Jn13", "Jn14", "Jn15", "Jn16",
+              "Jn17", "Jn18", "Jn19", "Jn20", "Jn21", "Jn22", "Jn23", "Jn24", "Jn25", "Jn26",
+              "Jn27", "Jn28", "Jn29", "Jn30", "Jn31", "Jn32", "Jn33", "Jn34", "Jn35", "Jn36"]
+    SZA[SZA > 90] = 90  # SZA.shape -> (x,1)
     data_file = dirname(__file__) + sep + "HybridJvalues.mat"
     data = loadmat(data_file)
     J = {}
-    #SZA_, ALB_, O3C_, ALT_, data["SZAhybrid"], data["ALBhybrid"], data["O3Chybrid"], data["ALThybrid"],
+    # SZA_, ALB_, O3C_, ALT_, data["SZAhybrid"], data["ALBhybrid"], data["O3Chybrid"], data["ALThybrid"],
     J_ = data["Jhybrid"]
-    SZA_, ALB_, O3C_, ALT_=arange(0, 95, 5), arange(0, 1.2, 0.2), arange(100, 650, 50), arange(0, 16000, 1000)
-    #The shape of SZA_, ALB_, O3C_, ALT_ -> (19,6,11,16), the shape of element in J_ -> (19,6,11,16)
+    SZA_, ALB_, O3C_, ALT_ = arange(0, 95, 5), arange(0, 1.2, 0.2), arange(100, 650, 50), arange(0, 16000, 1000)
+    # The shape of SZA_, ALB_, O3C_, ALT_ -> (19,6,11,16), the shape of element in J_ -> (19,6,11,16)
     pts = hstack((SZA, albedo, O3col, ALT))
     for index, j in enumerate(J_name):
         J_target = J_[0, 0][index]
@@ -67,12 +67,12 @@ def J_Hybrid(SZA, ALT, O3col, albedo):
 
 
 def J_Hybrid_new(SZA, ALT, O3col, albedo):
-    #try:
+    # try:
     #    SZA = array(SZA)
     #    ALT = array(ALT)
     #    O3col = array(O3col)
     #    albedo = array(albedo)
-    #except:
+    # except:
     #    raise ValueError("J_Hybrid: Invalid Met, cannot transform to ndarray")
 
     SZA[SZA > 90] = 90  # SZA.shape -> (x,1)  # 浮点计算可能些微超过90度，将大于90度规整为90度

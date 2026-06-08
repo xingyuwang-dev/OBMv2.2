@@ -2,7 +2,6 @@ from pandas import to_numeric, Series
 from numpy import array
 from CB05.CB05_transfrom import transfrom
 
-
 # 此是用来处理RIR模块的数据
 # 和EKMA模块下处理数据的部分一致
 
@@ -43,21 +42,21 @@ def data_processed(data, compound_name, arg):
     M, N = data.shape
     data.interpolate(limit_direction="both", inplace=True)
     data[data < 0] = 0
-    #toppb = {"NO": 1.339, "NO2": 2.054, "O3": 2.143, "CO": 0.00125, "SO2": 3.392}
-    #toppb_name = set(toppb.keys()) & set(data.columns)
-    #for name in toppb_name:
+    # toppb = {"NO": 1.339, "NO2": 2.054, "O3": 2.143, "CO": 0.00125, "SO2": 3.392}
+    # toppb_name = set(toppb.keys()) & set(data.columns)
+    # for name in toppb_name:
     #    data[name] = data[name] / toppb[name]
     HOUR = data.index.to_list()
 
-    #extra rule
+    # extra rule
     for i in data.columns:
         if i not in threshold.keys() and i not in {"NO", "NO2", "O3", "CO", "T", "P", "H", "PAR", "NR"}:
             data.loc[data[i] > 30, i] = 30
         elif i in threshold.keys():
             data.loc[data[i] > threshold[i], i] = threshold[i]
 
-    #extra rule2
-    PRESSURE = [1001]*M
+    # extra rule2
+    PRESSURE = [1001] * M
     if 6 < MONTH <= 10:
         TEMPERATURE = tem_summer[HOUR]
         HUMIDITY = hum_summer[HOUR]
@@ -65,16 +64,16 @@ def data_processed(data, compound_name, arg):
         TEMPERATURE = tem_winter[HOUR]
         HUMIDITY = hum_winter[HOUR]
     else:
-        TEMPERATURE = [(i+j)/2 for i, j in zip(tem_summer[HOUR], tem_winter[HOUR])]
-        HUMIDITY = [(i+j)/2 for i, j in zip(hum_summer[HOUR], hum_winter[HOUR])]
+        TEMPERATURE = [(i + j) / 2 for i, j in zip(tem_summer[HOUR], tem_winter[HOUR])]
+        HUMIDITY = [(i + j) / 2 for i, j in zip(hum_summer[HOUR], hum_winter[HOUR])]
     if "T" in data.columns:
-        TEMPERATURE = data["T"].tolist() if T == -1 else [T]*M
+        TEMPERATURE = data["T"].tolist() if T == -1 else [T] * M
     if "P" in data.columns:
-        PRESSURE = (data["P"]*10).tolist() if P == -1 else [P]*M
+        PRESSURE = (data["P"] * 10).tolist() if P == -1 else [P] * M
     if "H" in data.columns:
-        HUMIDITY = data["H"].tolist() if H == -1 else [H]*M
+        HUMIDITY = data["H"].tolist() if H == -1 else [H] * M
 
-    #CB05 model
+    # CB05 model
     """
     columns_set = set(data.columns)
     iole = {"CPENT2ENE", "TBUT2ENE", "CBUT2ENE", "TPENT2ENE"} & columns_set

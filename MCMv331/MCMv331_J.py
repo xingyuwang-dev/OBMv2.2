@@ -2,41 +2,41 @@ from numpy import power, exp, array, cos, tile, pi
 from photolysis.J_Hybrid import J_Hybrid
 
 
-#function J=MCMv331_J(Met,Jmethod)
-#calculates generic photolysis rate constants used in MCMv3.3.1 mechanism
+# function J=MCMv331_J(Met,Jmethod)
+# calculates generic photolysis rate constants used in MCMv3.3.1 mechanism
 #
-#INPUTS:
-#Met: structure containing required meteorological constraints. Required vars depend on Jmethod
-#Met.SZA: solar zenith angle in degrees
-#Met.O3col: overhead ozone column, DU
-#Met.albedo: surface reflectance, 0-1 (unitless)
-#Met.T: temperature, T
-#Met.P: pressure, mbar
-#Met.LFlux: name of a text file containing an actinic flux spectrum
+# INPUTS:
+# Met: structure containing required meteorological constraints. Required vars depend on Jmethod
+# Met.SZA: solar zenith angle in degrees
+# Met.O3col: overhead ozone column, DU
+# Met.albedo: surface reflectance, 0-1 (unitless)
+# Met.T: temperature, T
+# Met.P: pressure, mbar
+# Met.LFlux: name of a text file containing an actinic flux spectrum
 #
-#Jmethod: numeric flag or string specifying how to calculate J-values, Default is "MCM"
-#0 or "MCM": sue MCMv3.3.1 parameterization
-#Required Met fields: SZA
-#1 or "BOTTOMUP": bottom-up integration of cross sections/quantum yields
-#See J_BottomUp.m for more info
-#Required Met fields: LFlux, T, P
-#2 or "HYBIRD": Interpolation of hybrid J-values from TUV solar spectra
-#See J_TUVhybrid.m for more info
-#Required Met fields: SZA, ALT, O3col, albedo
+# Jmethod: numeric flag or string specifying how to calculate J-values, Default is "MCM"
+# 0 or "MCM": sue MCMv3.3.1 parameterization
+# Required Met fields: SZA
+# 1 or "BOTTOMUP": bottom-up integration of cross sections/quantum yields
+# See J_BottomUp.m for more info
+# Required Met fields: LFlux, T, P
+# 2 or "HYBIRD": Interpolation of hybrid J-values from TUV solar spectra
+# See J_TUVhybrid.m for more info
+# Required Met fields: SZA, ALT, O3col, albedo
 
 
-def MCMv331_J(Met, Jmethod = "MCM"):
+def MCMv331_J(Met, Jmethod="MCM"):
     # input:
     # Met={'SZA':,'ALT':,'O3col':,'albedo':,'T':,'P':,'LFlux':}
     # Jmethod: 0-'MCM' or 1-'BOTTOM' or 2-'HYBRID'
 
     # output:
     # J:{"":}
-    Jmethod=str(Jmethod).upper()
+    Jmethod = str(Jmethod).upper()
 
     if Jmethod == "0" or Jmethod == "MCM":
         try:
-            SZA = array(Met["SZA"])#SZA.shape -> (x,1)
+            SZA = array(Met["SZA"])  # SZA.shape -> (x,1)
         except:
             raise ValueError("MCMv331_J: InvalidInput, Check SZA in your Met data.")
         Jnames = ["J1", "J2", "J3", "J4", "J5", "J6", "J7", "J8", "J11", "J12", "J13", "J14", "J15", "J16", "J17",
@@ -52,7 +52,7 @@ def MCMv331_J(Met, Jmethod = "MCM"):
         n_origin = array([0.474, 0.080, 0.279, 0.267, 0.108, 0.125, 0.288, 0.307, 0.353, 0.323, 0.417, 0.358, 0.338,
                           0.338, 0.364, 0.298, 0.298, 0.298, 0.271, 0.377, 0.296, 0.296, 0.201, 0.201, 0.312, 0.208,
                           0.215, 0.279, 0.318, 0.335, 0.328, 0.316, 0.309, 0.323, 0.266])
-        SZAbig = tile(SZA, [1, len(Jnames)])#35 is the J_values total number
+        SZAbig = tile(SZA, [1, len(Jnames)])  # 35 is the J_values total number
         Ibig = tile(I_origin, [SZA.shape[0], 1])
         mbig = tile(m_origin, [SZA.shape[0], 1])
         nbig = tile(n_origin, [SZA.shape[0], 1])
@@ -70,4 +70,5 @@ def MCMv331_J(Met, Jmethod = "MCM"):
 
         return J
     else:
-        raise SyntaxError(f"MCMv331_J: invalid {Jmethod}. Valid options are \"MCM (0)\", \"BOTTOMUP (1)\", \"HYBRID (3)\"")
+        raise SyntaxError(
+            f"MCMv331_J: invalid {Jmethod}. Valid options are \"MCM (0)\", \"BOTTOMUP (1)\", \"HYBRID (3)\"")

@@ -1,5 +1,6 @@
 from core.RIR_data_process import data_processed
 from warnings import simplefilter
+
 simplefilter("ignore")
 
 
@@ -17,5 +18,5 @@ def do_split(data, compound_name, arg1):
     data2 = data.groupby(["special"], sort=False)  # 将data拆分成不同的天
     for _, items in data2:  # 每天数据用data_process.py脚本处理
         items.index = items.iloc[:, 0]
-        result.append(data_processed(items, compound_name, arg1))# [(data,time,climate),]
+        result.append(data_processed(items, compound_name, arg1))  # [(data,time,climate),]
     return result

@@ -4,8 +4,8 @@ from os import sep
 from os.path import dirname
 from sys import platform
 import pylab  # 不要删除这个，可能会出错
-plt.rcParams["axes.unicode_minus"] = False
 
+plt.rcParams["axes.unicode_minus"] = False
 
 if platform == "darwin":  # 判断是否处理mac电脑，因为mac电脑可能没有相应的字体
     plt.rcParams['font.sans-serif'] = ['Arial Unicode MS']
@@ -53,7 +53,7 @@ def plot_OH(data, path=dirname(__file__), pic="OH_reactivity.png"):
     y_max = int(y_max / 5) * 5 + 11  # 设置刻度y的最大值
     plt.yticks(ticks=range(-10, int(y_max) + 1, 5), fontsize=font_size)
     plt.ylim((0, y_max))
-    plt.legend(loc="upper right", fontsize=font_size-5, ncol=3, frameon=False)  # 设置图例
-    plt.ylabel(u'OH reactivity (${s^{-1}}$)', fontsize=font_size-3)  # y轴名称
+    plt.legend(loc="upper right", fontsize=font_size - 5, ncol=3, frameon=False)  # 设置图例
+    plt.ylabel(u'OH reactivity (${s^{-1}}$)', fontsize=font_size - 3)  # y轴名称
     plt.xlabel('Time', fontsize=font_size)  # x轴名称
     plt.savefig(pic_file, dpi=600, bbox_inches="tight", facecolor="white", transparent=False)

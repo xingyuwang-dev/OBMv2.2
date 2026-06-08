@@ -24,7 +24,7 @@ class FireWork(object):
         self.colors = ((randint(0, 255), randint(0, 255), randint(0, 255)),
                        (randint(0, 255), randint(0, 255), randint(0, 255)),
                        (randint(0, 255), randint(0, 255), randint(0, 255)))
-        self.firework = Particle(randint(100, DISPLAY_WIDTH-100), DISPLAY_HEIGHT+200, True, self.color)
+        self.firework = Particle(randint(100, DISPLAY_WIDTH - 100), DISPLAY_HEIGHT + 200, True, self.color)
         self.exploded = False
         self.particles = []
         self.min_max_particles = vector(100, 255)
@@ -120,7 +120,8 @@ class Particle:
         self.life += 1
 
     def show(self, win):
-        pygame.draw.circle(win, (self.color[0], self.color[1], self.color[2], 0), (int(self.pos.x), int(self.pos.y)), self.size)
+        pygame.draw.circle(win, (self.color[0], self.color[1], self.color[2], 0), (int(self.pos.x), int(self.pos.y)),
+                           self.size)
 
     def decay(self):
         if 50 > self.life > 10:
@@ -156,7 +157,7 @@ class Trail:
             self.size = int(size - n / 2)
         else:
             self.color = (255, 255, 200)
-            self.size = size -2
+            self.size = size - 2
             if self.size < 0:
                 self.size = 0
 

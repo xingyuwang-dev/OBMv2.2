@@ -10,7 +10,7 @@ import receiver_pb2_grpc
 
 data = read_csv('/Users/xingyuwang/Desktop/OBM_EKMA/data_monitored.csv')  # 读取数据，DataFrame格式
 data = data.to_dict(orient="list")  # 将数据按列转化为字典，每个value为一个数组
-#with open("/Users/xingyuwang/Desktop/rir.txt") as f:
+# with open("/Users/xingyuwang/Desktop/rir.txt") as f:
 #    data = f.readlines()[0]
 
 _HOST = 'localhost'  # 本机
@@ -25,9 +25,9 @@ send_parameters = {"model": 1,  # 表示要运行哪个模块的参数，1:EKMA�
                    "longitude": 120,  # 经度，默认120，纬度，默认30，海报，默认30
                    "latitude": 30,
                    "altitude": 30,
-                   "i_array":[0.1,0.4,0.7,1.0,1.3,1.6,1.9,2.2,2.5],  # vocs情景，默认0.1到2.5，0.3为间隔
-                   "j_array":[0.1,0.4,0.7,1.0,1.3,1.6,1.9,2.2,2.5],  # nox情景，默认0.1到2.5，0.3为间隔
-                   "kdil": 1/86400,  # 稀释速率
+                   "i_array": [0.1, 0.4, 0.7, 1.0, 1.3, 1.6, 1.9, 2.2, 2.5],  # vocs情景，默认0.1到2.5，0.3为间隔
+                   "j_array": [0.1, 0.4, 0.7, 1.0, 1.3, 1.6, 1.9, 2.2, 2.5],  # nox情景，默认0.1到2.5，0.3为间隔
+                   "kdil": 1 / 86400,  # 稀释速率
                    "jcorr": 1,  # 光解速率校正系数
                    "p": 1001,  # 气压
                    "t": 20,  # 温度
@@ -44,6 +44,7 @@ send_parameters = {"model": 1,  # 表示要运行哪个模块的参数，1:EKMA�
                    "linksteps": 1,  # 迭代控制参数
                    "fixnox": 0}  # NOx校正参数
 
+
 def run():
     channel = grpc.insecure_channel('{0}:{1}'.format(_HOST, _PORT),
                                     options=(('grpc.max_send_message_length', MAX_MESSAGE_LENGTH),
@@ -56,9 +57,9 @@ def run():
 
 if __name__ == '__main__':
     result = run()
-    #I_ARRAY=[0.1,0.4,0.7,1.0,1.3,1.6,1.9,2.2,2.5]
-    #J_ARRAY=[0.1,0.4,0.7,1.0,1.3,1.6,1.9,2.2,2.5]
-    #nox=float(result["y_value"])
-    #vocs=float(result["x_value"])
-    #plot_EKMA([vocs,nox],DataFrame(result["data"]).to_numpy(),I_ARRAY,J_ARRAY)
+    # I_ARRAY=[0.1,0.4,0.7,1.0,1.3,1.6,1.9,2.2,2.5]
+    # J_ARRAY=[0.1,0.4,0.7,1.0,1.3,1.6,1.9,2.2,2.5]
+    # nox=float(result["y_value"])
+    # vocs=float(result["x_value"])
+    # plot_EKMA([vocs,nox],DataFrame(result["data"]).to_numpy(),I_ARRAY,J_ARRAY)
     print(result)

@@ -2,11 +2,11 @@ from wave import open
 
 
 def victory(file):
-    print("*"*40)
+    print("*" * 40)
     print("\    / | ----- ----- ----- |--\ / |")
     print(" \  /  | |     |  |  ||__/ | |")
     print("  \/   | _____  |   ____ | \ | .")
-    print("*"*40)
+    print("*" * 40)
     try:
         from pyaudio import PyAudio
     except Exception as e:

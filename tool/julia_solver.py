@@ -25,8 +25,3 @@ def julia_f(du, u, p, t):
     dilrate = -kdil * (u - conc_bkgd)
     du += dilrate
     du[iHold] = 0
-
-
-
-
-

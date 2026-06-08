@@ -5,7 +5,6 @@ from os import sep
 from numpy import array, concatenate
 from sys import platform
 
-
 # 此脚本为整个模型的核心中的核心，最重要的求解器！！！不建议在没有完全理解之前进行任何修改
 # 对于计算速度的追求，弃用了之前dydt_eval.py与Jac_eval.py脚本，采用新的jitcode库来实现计算速度的要求
 # 该脚本不会对任何单独求解器语句解释，以防止不必要的修改导致的错误。为何会这么构造fun与solver3请参考

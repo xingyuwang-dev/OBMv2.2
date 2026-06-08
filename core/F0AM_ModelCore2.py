@@ -12,6 +12,7 @@ from tool.CovertHumidity import CovertHumidity
 from InitializeChemistry import InitializeChemistry
 from tool.jit_solver import solver3
 
+
 # 该模块为精简化的F0AM_ModelCore, 拆分为了两个子模块：1:F0AM_ModelCore_read，2:F0AM_ModelCore_calculate，前者通过
 # InitializeChemistry脚本来初始化化学机理，后者利用初始化后的化学机理与监测物质浓度，基于求解器计算浓度变化。
 # 拆开的原因是因为前一部分可以拆开，hhh；主要是因为再多进程之前，提前初始化适用于所有情景的化学机理，然后再结合监测浓度，利用多进程
@@ -27,7 +28,7 @@ def F0AM_ModelCore_read(Met, ChemFiles):
     if 'RH' in Met.keys() and 'H2O' in Met.keys():
         warn('F0AM_ModelCore: UnusedInput, RH and H2O both specified in Met. H2O takes priority')
 
-    Met.update({"H2O": []})#, 'O3col': 300, 'albedo': 0.1})
+    Met.update({"H2O": []})  # , 'O3col': 300, 'albedo': 0.1})
     Met = {i: array(j).reshape(-1, 1) for i, j in Met.items()}  # Met[i].shape -> (x,1)
     lExpand = Met["P"].shape[0]
     for key, value in Met.items():
@@ -40,7 +41,7 @@ def F0AM_ModelCore_read(Met, ChemFiles):
     # SolarParam['nDays'] = SolarParam['nDays'][0]
     # SolarParam["startTime"] = tile(SolarParam["startTime"], (1, 6))
 
-    Cnames, _, k, f, iG, iRO2, Met['jcorr'], Met['jcorr_all'] = InitializeChemistry(Met, ChemFiles,  1)
+    Cnames, _, k, f, iG, iRO2, Met['jcorr'], Met['jcorr_all'] = InitializeChemistry(Met, ChemFiles, 1)
     print(f"READ RUN TIME IS {(datetime.now() - StartTime).seconds} SECONDS")
 
     return Met["M"], k, f, iG, iRO2, Cnames
@@ -61,7 +62,7 @@ def F0AM_ModelCore_calculate(args):  # 为了兼顾多进程，所有参数放�
     for i in IcutC:
         conc_init[:, Cnames.index(i)] = InitConc[i]
     conc_init *= tile(Met_M, (1, N)) * 1e-9
-    conc_init[:, 0] = 1   # 将 "ONE" 物种浓度设置为1，详情见InitializeChemistry的注释
+    conc_init[:, 0] = 1  # 将 "ONE" 物种浓度设置为1，详情见InitializeChemistry的注释
     conc_init[:, 1] = sum(conc_init[:, iRO2], axis=1)  # 这里跟RO2有关，详情见InitializeChemistry注释
 
     iNOx, iO3 = [Cnames.index("NO"), Cnames.index("NO2")], Cnames.index("O3")
@@ -97,7 +98,7 @@ def F0AM_ModelCore_calculate(args):  # 为了兼顾多进程，所有参数放�
                      ModelOptions['Verbose'], NOxinfo]
             t = ModelOptions["IntTime"]
             _, conc_out = solver3(t, conc_init_step, param, solver)
-            #_, conc_out = julia_solver(t, conc_init_step, param)
+            # _, conc_out = julia_solver(t, conc_init_step, param)
             # options = odeset("Jacobian", @(t,conc_out)Jac_eval(t, conc_out, param))# odeset is a tool to create struct for ode15s()
             # time_out, conc_out = ode15s(@(t,conc_out)dydt_eval(t, conc_out, param), [0,ModelOptions["IntTime"]],
             #                        conc_init_step.T, options)
