@@ -1,0 +1,23 @@
+# ===== Environment =====
+.env
+.env.*
+venv/
+.venv/
+env/
+
+# ===== IDE =====
+.idea/
+.vscode/
+
+# ===== Python =====
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# ===== OS =====
+.DS_Store
+
+# ===== Logs =====
+*.log

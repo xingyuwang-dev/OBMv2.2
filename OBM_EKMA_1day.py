@@ -4,14 +4,14 @@ from datetime import datetime,timedelta
 from os import makedirs,sep
 from os.path import exists,dirname
 from sys import exit
-from Tool.sun_position import sun_position
+from tool.sun_position import sun_position
 from data_run import data_run
 from copy import deepcopy
-from Tool.plot import plot_EKMA
-from Tool.data_average import do_mean, calculate_noxvoc
-from Tool.victory import victory
+from tool.plot import plot_EKMA
+from tool.data_average import do_mean, calculate_noxvoc
+from tool.victory import victory
 from CB05.CB05_transfrom import transfrom
-from Tool.file_transform import file_transform
+from tool.file_transform import file_transform
 
 
 # 此为线下开发，测试时运行的OBM模型的EKMA模块入口，非线上版本，非OBM软件版本
@@ -153,4 +153,4 @@ if __name__ == "__main__":
     end_time=datetime.now()
     cost_seconds=(end_time-start_time).seconds
     log_write(log_file,f"Total cost time: {cost_seconds}s.\n")  # 写入log总花费时间
-    victory(dirname(__file__)+sep+"Tool"+sep+"ffVII_victory.wav")  # 庆祝🎉
+    victory(dirname(__file__)+sep+"tool"+sep+"ffVII_victory.wav")  # 庆祝🎉

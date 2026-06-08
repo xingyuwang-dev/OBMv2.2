@@ -4,15 +4,15 @@ from datetime import datetime,timedelta
 from os import makedirs,sep
 from os.path import exists,dirname
 from sys import exit
-from Tool.sun_position import sun_position
+from tool.sun_position import sun_position
 from data_run import data_run
 from copy import deepcopy
-from Tool.plot import plot_EKMA
-from Tool.data_average import do_mean, calculate_noxvoc
-from Tool.victory import victory
+from tool.plot import plot_EKMA
+from tool.data_average import do_mean, calculate_noxvoc
+from tool.victory import victory
 from CB05.CB05_transfrom import transfrom
 from functools import partial
-from Tool.file_transform import file_transform
+from tool.file_transform import file_transform
 
 
 # 此为OBM模型的软件版本的EKMA模块，主要区别为 不是模型的入口，入口位于UI.py，由其调用并传参
@@ -187,5 +187,5 @@ def EKMA_start(send_dict):
     end_time=datetime.now()
     cost_seconds=(end_time-start_time).seconds
     log_write(log_file,f"Total cost time: {cost_seconds}s.\n")
-    victory(dirname(__file__)+sep+"Tool"+sep+"ffVII_victory.wav")
+    victory(dirname(__file__)+sep+"tool"+sep+"ffVII_victory.wav")
     return "1"  # 返回UI "1"

@@ -1,6 +1,6 @@
 from scipy.integrate import ode, solve_ivp
-from Tool.dydt_eval import dydt_eval
-from Tool.Jac_eval import Jac_eval
+from tool.dydt_eval import dydt_eval
+from tool.Jac_eval import Jac_eval
 
 
 # 该脚本已弃用，但依然可以使用

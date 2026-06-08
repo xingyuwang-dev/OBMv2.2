@@ -4,20 +4,20 @@
 # Descended from the university of Washington Chemical Model (UWCM), first beget 20101211 by GMW/JAT
 # See ReadMe for description of inputs and outputs
 # Transformed from MATLAB code to Python code by puyukeji.cnpowder.com Data Research Group(beget 2022/04/11)
-from Tool.CheckDict import CheckDict
-from Tool.sun_position import sun_position
+from tool.CheckDict import CheckDict
+from tool.sun_position import sun_position
 from datetime import datetime
 from os import sep
 from os.path import exists, dirname
 from numpy import tile, zeros, array, ones, sum, linspace, floor, r_, median, diff
-from Tool.Check4NanNeg import Check4NanNeg
+from tool.Check4NanNeg import Check4NanNeg
 from warnings import warn
-from Tool.NumberDensity import NumberDensity
-from Tool.CovertHumidity import CovertHumidity
+from tool.NumberDensity import NumberDensity
+from tool.CovertHumidity import CovertHumidity
 from InitializeChemistry import InitializeChemistry
-from Tool.victory import victory
-from Tool.ode15s import solver, solver2
-from Tool.jit_solver import solver3
+from tool.victory import victory
+from tool.ode15s import solver, solver2
+from tool.jit_solver import solver3
 from json import dumps
 
 
@@ -385,7 +385,7 @@ def F0AM_ModelCore(args):
 
     if ModelOptions["DeclareVictory"]:  # 是否欢呼！
         try:
-            victory(dirname(__file__)+sep+"Tool"+sep+"ffVII_victory.wav")
+            victory(dirname(__file__)+sep+"tool"+sep+"ffVII_victory.wav")
         except FileNotFoundError:
             print("LOL")
     print(f"TOTAL RUN TIME IS {(datetime.now() - StartTime).seconds} SECONDS")

@@ -5,7 +5,7 @@ from os import sep, makedirs, getpid, getppid
 from json import loads
 from RIR_data_process import data_processed
 from RIR_data_run2 import initialize, update, initialize_update
-from Tool.data_split import do_split
+from tool.data_split import do_split
 from copy import deepcopy
 from sys import exit
 

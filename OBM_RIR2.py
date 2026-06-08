@@ -5,11 +5,11 @@ from os.path import exists, dirname
 from sys import exit
 from RIR_data_process import data_processed
 from RIR_data_run2 import initialize, update
-from Tool.data_average import do_mean
+from tool.data_average import do_mean
 import csv
-from Tool import plot_ozone, plot_OH, plot_photolysis
+from tool import plot_ozone, plot_OH, plot_photolysis
 from functools import partial
-from Tool.file_transform import file_transform
+from tool.file_transform import file_transform
 
 
 # 此为OBM软件的RIR模块，不是程序的主入口，入口位于UI.py

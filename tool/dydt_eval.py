@@ -1,5 +1,5 @@
 from numpy import ones, sum, ndarray
-from Tool.meter import meter
+from tool.meter import meter
 
 # function dydt=dydt_eval(t,conc,param)
 # evaluates chemical rates

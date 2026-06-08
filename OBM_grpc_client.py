@@ -3,7 +3,7 @@ from pandas import read_csv, DataFrame
 import grpc
 import receiver_pb2
 import receiver_pb2_grpc
-from Tool.plot import plot_EKMA
+from tool.plot import plot_EKMA
 
 
 # 此脚本为测试OBM_grpc.py是否正常工作的脚本，即模拟后端发送数据给OBM_grpc.py

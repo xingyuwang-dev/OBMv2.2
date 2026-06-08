@@ -1,6 +1,6 @@
 from numpy import array, ones, tile, argwhere
 from collections import Counter, defaultdict
-from Tool.AddSpecies import AddSpecies
+from tool.AddSpecies import AddSpecies
 from importlib import import_module
 from MCMv331.MCMv331_K import MCMv331_K
 from MCMv331.MCMv331_J import MCMv331_J

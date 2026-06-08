@@ -7,11 +7,11 @@
 from datetime import datetime
 from numpy import tile, zeros, array, sum
 from warnings import warn
-from Tool.NumberDensity import NumberDensity
-from Tool.CovertHumidity import CovertHumidity
+from tool.NumberDensity import NumberDensity
+from tool.CovertHumidity import CovertHumidity
 from InitializeChemistry import InitializeChemistry
-from Tool.jit_solver import solver3
-#from Tool. julia_solver import julia_solver
+from tool.jit_solver import solver3
+#from tool. julia_solver import julia_solver
 # このバージョンは元のF0AM_ModelCoreの簡易版で、サーバーの上で高速で、簡単に運行できるために作られました。フルバージョンはF0AM_ModelCore.pyといいます。
 # 该模块为精简化的F0AM_ModelCore, 拆分为了两个子模块：1:F0AM_ModelCore_read，2:F0AM_ModelCore_calculate，前者通过
 # InitializeChemistry脚本来初始化化学机理，后者利用初始化后的化学机理与监测物质浓度，基于求解器计算浓度变化。

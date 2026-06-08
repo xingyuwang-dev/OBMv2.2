@@ -5,10 +5,10 @@ from os.path import exists
 from sys import exit
 from RIR_data_process import data_processed
 from RIR_data_run2 import initialize, update
-from Tool.data_average import do_mean
+from tool.data_average import do_mean
 import csv
-from Tool import plot_ozone, plot_OH, plot_photolysis
-from Tool.file_transform import file_transform
+from tool import plot_ozone, plot_OH, plot_photolysis
+from tool.file_transform import file_transform
 
 
 # 此脚本为现在开发，测试所用的OBM模型的RIR模块线下版本，所有与RIR有关的计算从此开始

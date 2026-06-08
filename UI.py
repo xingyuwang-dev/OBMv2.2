@@ -295,14 +295,14 @@ class Example(QFrame):
         y_loc = e.pos().y()
         if y_loc < 10:
             if self.frameGeometry().width() - x_loc < 10:
-                from Tool.funny import the_python
+                from tool.funny import the_python
                 the_python()
             elif 10 < self.frameGeometry().width() - x_loc <= 20:
                 import webbrowser
                 webbrowser.open("https://eyes.nasa.gov/apps/orrery/#/home")
                 webbrowser.open("https://murray-lab.caltech.edu/CTX/V01/SceneView/MurrayLabCTXmosaic.html")
             elif 20 < self.frameGeometry().width() - x_loc <= 30:
-                from Tool.funny import the_hanabi
+                from tool.funny import the_hanabi
                 the_hanabi()
 
     def reaction(self, signal):  # 接受OBM线程返回的结果，判断是否运行成功

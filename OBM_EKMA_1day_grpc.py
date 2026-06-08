@@ -4,11 +4,11 @@ from datetime import datetime
 from os import sep
 from os.path import exists, dirname
 from sys import exit
-from Tool.sun_position import sun_position
+from tool.sun_position import sun_position
 from data_run import data_run
 from copy import deepcopy
 from json import loads
-from Tool.data_average import do_mean, calculate_noxvoc
+from tool.data_average import do_mean, calculate_noxvoc
 from CB05.CB05_transfrom import transfrom
 from scipy.interpolate import interp1d, interp2d
 

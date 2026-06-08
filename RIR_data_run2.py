@@ -1,6 +1,6 @@
 from F0AM_ModelCore2 import F0AM_ModelCore_read, F0AM_ModelCore_calculate
 from multiprocessing import Pool, cpu_count, freeze_support
-from Tool.sun_position import sun_position
+from tool.sun_position import sun_position
 from copy import deepcopy
 from json import dumps, load
 from numpy import append
