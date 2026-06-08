@@ -1,0 +1,11 @@
+numpy
+scipy
+pandas
+jitcode
+symengine
+PyQt6
+grpc
+matplotlib
+pylab
+pygame
+wave

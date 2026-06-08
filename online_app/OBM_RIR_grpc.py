@@ -15,7 +15,7 @@ from sys import exit
 main_path = "/Users/xingyuwang/Desktop/OBM_RIR"  # 在线上版本和OBM软件会被替换为dirname(__file__)，采用相对路径！！！
 compound_name_file = main_path + sep + "comparison_table.csv"
 log_file = main_path + sep + "init_log.txt"
-log_file2 = main_path + sep + "update_log.txt"
+log_file2 = main_path + sep + "requirements.txt"
 compound_name = read_csv(compound_name_file, header=None)
 
 

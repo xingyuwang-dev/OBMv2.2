@@ -94,7 +94,7 @@ data_file_ = main_path + sep + "6月OBM输入数据.xlsx"  # 预热数据
 compound_name_file = main_path + sep + "comparison_table.csv"
 save_path = main_path + sep + DATE  # 保存路径
 log_file = main_path + sep + "init_log.txt"  # 预热模式的log文件
-log_file2 = main_path + sep + "update_log.txt"  # 更新模式的log文件
+log_file2 = main_path + sep + "requirements.txt"  # 更新模式的log文件
 
 data_file1 = save_path + sep + "free_radical_concentration.csv"  # 自由基浓度
 data_file2 = save_path + sep + "rate_of_ozone_generation.csv"  # 臭氧生成速率

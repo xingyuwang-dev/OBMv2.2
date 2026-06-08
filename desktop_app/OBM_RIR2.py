@@ -86,7 +86,7 @@ main_path = dirname(__file__)
 compound_name_file = main_path + sep + "comparison_table.csv"
 # save_path_ = main_path + sep + DATE
 log_file = main_path + sep + "init_log.txt"
-log_file2 = main_path + sep + "update_log.txt"
+log_file2 = main_path + sep + "requirements.txt"
 
 data_file1 = "free_radical_concentration.csv"
 data_file2 = "rate_of_ozone_generation.csv"
